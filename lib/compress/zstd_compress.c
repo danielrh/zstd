@@ -25,7 +25,7 @@
 #include "zstd_lazy.h"
 #include "zstd_opt.h"
 #include "zstd_ldm.h"
-
+#include <stdio.h>
 
 /*-*************************************
 *  Helper functions
@@ -1657,6 +1657,100 @@ void ZSTD_seqToCodes(const seqStore_t* seqStorePtr)
         mlCodeTable[seqStorePtr->longLengthPos] = MaxML;
 }
 
+void update_distance_cache(U64 distance, U64 cache[3]) {
+    if (cache[0] != distance) {
+        if (cache[1] == distance) {
+            cache[1] = cache[0];
+            cache[0] = distance;
+        } else {
+            cache[2] = cache[1];
+            cache[1] = cache[0];
+            cache[0] = distance;
+        }
+    }
+}
+
+U64 ZSTD_seqToIR(const seqStore_t* seqStorePtr, const BYTE* literals, const BYTE* lit_end, U64 global_offset)
+{
+    const BYTE *lit_start = literals;
+    const seqDef* const sequences = seqStorePtr->sequencesStart;
+    BYTE* const llCodeTable = seqStorePtr->llCode;
+    BYTE* const ofCodeTable = seqStorePtr->ofCode;
+    BYTE* const mlCodeTable = seqStorePtr->mlCode;
+    U32 const nbSeq = (U32)(seqStorePtr->sequences - seqStorePtr->sequencesStart);
+    U32 u;
+    U64 distance_cache[3] = {1, 4, 8};
+    for (u=0; u<nbSeq; u++) {
+        U32 const llv = sequences[u].litLength;
+        U32 const mlv = sequences[u].matchLength + MINMATCH;
+        if (llv  != 0) {
+            U32 lit_index;
+            fprintf(stderr, "insert %d ", llv);
+            for (lit_index = 0; lit_index < llv; ++lit_index) {
+                assert(literals + lit_index != lit_end &&  "Not enough literals to fill commands");
+                fprintf(stderr, "%02x", literals[lit_index]);
+            }
+            fprintf(stderr, "\n");
+            fprintf(stderr, "#LITS %d ", llv);
+            for (lit_index = 0; lit_index < llv; ++lit_index) {
+                assert(literals + lit_index != lit_end &&  "Not enough literals to fill commands");
+                if (literals[lit_index] >= 32 && literals[lit_index] <= 126) {
+                    fprintf(stderr, "%c", literals[lit_index]);
+                } else {
+                    fprintf(stderr, "\\x%02x", literals[lit_index]);
+                }
+            }
+            fprintf(stderr, "\n");
+            literals += llv;
+            global_offset += llv;
+        }
+        if (mlv != 0) {
+            U64 dist = sequences[u].offset;
+            if (dist <= 3) {
+                fprintf(stderr, "#CACHE: {%ld %ld %ld}(%ld)\n", distance_cache[0], distance_cache[1], distance_cache[2], dist);
+                if (dist == 0) {
+                    dist = distance_cache[0];
+                } else  {
+                    dist -= 1;
+                    if ((distance_cache[0] == 52 && dist == 0) || (dist == 2 && distance_cache[0] == 126) || (dist ==   1 && distance_cache[2] == 1782)) {
+                        dist += 1;
+                    }else {
+                        fprintf(stderr, "#NACHE: {%ld %ld %ld}(%ld)\n", distance_cache[0], distance_cache[1], distance_cache[2], dist);
+                    }
+                    U64 tmp = distance_cache[0];
+                    if (tmp > 1) {
+                        tmp -= 1;
+                    } else {
+                        tmp = 1;
+                    }
+                    if (dist < 3) {
+                        tmp = distance_cache[dist];
+                    }
+                    if (dist != 1) {
+                        distance_cache[2] = distance_cache[1];
+                    }
+                    distance_cache[1] = distance_cache[0];
+                    distance_cache[0] = tmp;
+                    dist = tmp;
+                }
+            } else {
+                dist -= 3;
+                distance_cache[2] = distance_cache[1];
+                distance_cache[1] = distance_cache[0];
+                distance_cache[0] = dist;
+            }
+            fprintf(stderr, "copy %d from %ld\n", mlv, dist);
+        }
+        llCodeTable[u] = (BYTE)ZSTD_LLcode(llv);
+        ofCodeTable[u] = (BYTE)ZSTD_highbit32(sequences[u].offset);
+        mlCodeTable[u] = (BYTE)ZSTD_MLcode(mlv);
+    }
+    if (seqStorePtr->longLengthID==1)
+        llCodeTable[seqStorePtr->longLengthPos] = MaxLL;
+    if (seqStorePtr->longLengthID==2)
+        mlCodeTable[seqStorePtr->longLengthPos] = MaxML;
+    return global_offset;
+}
 
 /**
  * -log2(x / 256) lookup table for x in [0, 256).
@@ -2120,7 +2214,7 @@ MEM_STATIC size_t ZSTD_compressSequences_internal(seqStore_t* seqStorePtr,
 
     /* seqHead : flags for FSE encoding type */
     seqHead = op++;
-
+    ZSTD_seqToIR(seqStorePtr, seqStorePtr->litStart, seqStorePtr->lit, 0); // FIXME: start at zero?
     /* convert length/distances into codes */
     ZSTD_seqToCodes(seqStorePtr);
     /* build CTable for Literal Lengths */
@@ -2403,6 +2497,7 @@ static size_t ZSTD_compress_frameChunk (ZSTD_CCtx* cctx,
     BYTE* const ostart = (BYTE*)dst;
     BYTE* op = ostart;
     U32 const maxDist = (U32)1 << cctx->appliedParams.cParams.windowLog;
+    fprintf(stderr, "window %d 0 0 0\n", cctx->appliedParams.cParams.windowLog);
     assert(cctx->appliedParams.cParams.windowLog <= 31);
 
     DEBUGLOG(5, "ZSTD_compress_frameChunk (blockSize=%u)", (U32)blockSize);
@@ -2439,10 +2534,16 @@ static size_t ZSTD_compress_frameChunk (ZSTD_CCtx* cctx,
             if (ZSTD_isError(cSize)) return cSize;
 
             if (cSize == 0) {  /* block is not compressible */
+                U64 i;
                 U32 const cBlockHeader24 = lastBlock + (((U32)bt_raw)<<1) + (U32)(blockSize << 3);
                 if (blockSize + ZSTD_blockHeaderSize > dstCapacity) return ERROR(dstSize_tooSmall);
                 MEM_writeLE32(op, cBlockHeader24);   /* 4th byte will be overwritten */
                 memcpy(op + ZSTD_blockHeaderSize, ip, blockSize);
+                fprintf(stderr, "insert %ld ", blockSize);
+                for (i = 0; i < blockSize; i++) {
+                    fprintf(stderr, "%02x", ip[i]);
+                }
+                fprintf(stderr, "\n");
                 cSize = ZSTD_blockHeaderSize + blockSize;
             } else {
                 U32 const cBlockHeader24 = lastBlock + (((U32)bt_compressed)<<1) + (U32)(cSize << 3);
