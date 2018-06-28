@@ -51,6 +51,7 @@
 #ifndef ZSTD_NO_FORWARD_PROGRESS_MAX
 #  define ZSTD_NO_FORWARD_PROGRESS_MAX 16
 #endif
+#include <stdio.h>
 
 /*-*******************************************************
 *  Dependencies
@@ -1037,7 +1038,19 @@ typedef struct {
     size_t pos;
 } seqState_t;
 
-
+void produceIR(const BYTE * lit, seq_t sequence) {
+    if (sequence.litLength) {
+        U32 i;
+        fprintf(stderr, "insert %ld ", sequence.litLength);
+        for (i = 0; i < sequence.litLength; ++i){
+            fprintf(stderr, "%02x", lit[i]);
+        }
+        fprintf(stderr, "\n");
+    }
+    if (sequence.matchLength) {
+        fprintf(stderr, "copy %ld from %ld\n", sequence.matchLength, sequence.offset);
+    }
+}
 FORCE_NOINLINE
 size_t ZSTD_execSequenceLast7(BYTE* op,
                               BYTE* const oend, seq_t sequence,
@@ -1050,12 +1063,11 @@ size_t ZSTD_execSequenceLast7(BYTE* op,
     BYTE* const oend_w = oend - WILDCOPY_OVERLENGTH;
     const BYTE* const iLitEnd = *litPtr + sequence.litLength;
     const BYTE* match = oLitEnd - sequence.offset;
-
     /* check */
     if (oMatchEnd>oend) return ERROR(dstSize_tooSmall); /* last match must start at a minimum distance of WILDCOPY_OVERLENGTH from oend */
     if (iLitEnd > litLimit) return ERROR(corruption_detected);   /* over-read beyond lit buffer */
     if (oLitEnd <= oend_w) return ERROR(GENERIC);   /* Precondition */
-
+    produceIR(*litPtr, sequence);
     /* copy literals */
     if (op < oend_w) {
         ZSTD_wildcopy(op, *litPtr, oend_w - op);
@@ -1102,7 +1114,7 @@ size_t ZSTD_execSequence(BYTE* op,
     if (oMatchEnd>oend) return ERROR(dstSize_tooSmall); /* last match must start at a minimum distance of WILDCOPY_OVERLENGTH from oend */
     if (iLitEnd > litLimit) return ERROR(corruption_detected);   /* over-read beyond lit buffer */
     if (oLitEnd>oend_w) return ZSTD_execSequenceLast7(op, oend, sequence, litPtr, litLimit, prefixStart, virtualStart, dictEnd);
-
+    produceIR(*litPtr, sequence);
     /* copy Literals */
     ZSTD_copy8(op, *litPtr);
     if (sequence.litLength > 8)
@@ -1183,7 +1195,7 @@ size_t ZSTD_execSequenceLong(BYTE* op,
     if (oMatchEnd > oend) return ERROR(dstSize_tooSmall); /* last match must start at a minimum distance of WILDCOPY_OVERLENGTH from oend */
     if (iLitEnd > litLimit) return ERROR(corruption_detected);   /* over-read beyond lit buffer */
     if (oLitEnd > oend_w) return ZSTD_execSequenceLast7(op, oend, sequence, litPtr, litLimit, prefixStart, dictStart, dictEnd);
-
+    produceIR(*litPtr, sequence);
     /* copy Literals */
     ZSTD_copy8(op, *litPtr);  /* note : op <= oLitEnd <= oend_w == oend - 8 */
     if (sequence.litLength > 8)
@@ -1401,7 +1413,12 @@ ZSTD_decompressSequences_body( ZSTD_DCtx* dctx,
 
     /* last literal segment */
     {   size_t const lastLLSize = litEnd - litPtr;
+        seq_t tmpSeq;
+        tmpSeq.litLength = lastLLSize;
+        tmpSeq.offset = 1;
+        tmpSeq.matchLength = 0;
         if (lastLLSize > (size_t)(oend-op)) return ERROR(dstSize_tooSmall);
+        produceIR(litPtr, tmpSeq);
         memcpy(op, litPtr, lastLLSize);
         op += lastLLSize;
     }
@@ -2869,7 +2886,15 @@ size_t ZSTD_decompressStream(ZSTD_DStream* zds, ZSTD_outBuffer* output, ZSTD_inB
                         (U32)(zds->maxWindowSize >> 10) );
             zds->fParams.windowSize = MAX(zds->fParams.windowSize, 1U << ZSTD_WINDOWLOG_ABSOLUTEMIN);
             if (zds->fParams.windowSize > zds->maxWindowSize) return ERROR(frameParameter_windowTooLarge);
-
+            {
+                int ws = zds->fParams.windowSize;
+                int lws = 1;
+                while (ws) {
+                    ws >>=1;
+                    lws +=1;
+                }
+                fprintf(stderr, "window %d 0 0 0\n", lws);
+            }
             /* Adapt buffer sizes to frame header instructions */
             {   size_t const neededInBuffSize = MAX(zds->fParams.blockSizeMax, 4 /* frame checksum */);
                 size_t const neededOutBuffSize = ZSTD_decodingBufferSize_min(zds->fParams.windowSize, zds->fParams.frameContentSize);
