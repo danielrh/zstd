@@ -541,8 +541,14 @@ size_t ZSTD_getcBlockSize(const void* src, size_t srcSize,
 static size_t ZSTD_copyRawBlock(void* dst, size_t dstCapacity,
                           const void* src, size_t srcSize)
 {
+    size_t i;
     if (srcSize > dstCapacity) return ERROR(dstSize_tooSmall);
     memcpy(dst, src, srcSize);
+    fprintf(stderr, "insert %ld ", srcSize);
+    for (i = 0;i <srcSize;++i) {
+        fprintf(stderr, "%02x", ((const BYTE*)src)[i]);
+    }
+    fprintf(stderr, "\n");
     return srcSize;
 }
 
@@ -554,6 +560,12 @@ static size_t ZSTD_setRleBlock(void* dst, size_t dstCapacity,
     if (srcSize != 1) return ERROR(srcSize_wrong);
     if (regenSize > dstCapacity) return ERROR(dstSize_tooSmall);
     memset(dst, *(const BYTE*)src, regenSize);
+    if (regenSize) {
+        fprintf(stderr, "insert 1 %02x\n", *(const BYTE*)src);
+    }
+    if (regenSize > 1) {
+        fprintf(stderr, "copy %ld 1\n", regenSize - 1);
+    }
     return regenSize;
 }
 
