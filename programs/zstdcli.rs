@@ -1,8 +1,13 @@
 #![allow
 ( dead_code , mutable_transmutes , non_camel_case_types , non_snake_case ,
 non_upper_case_globals , unused_mut )]
-#![feature ( const_slice_as_ptr , extern_types , libc , offset_to )]
+#![feature ( const_slice_as_ptr , extern_types , libc , offset_to ,start,  used)]
 extern crate libc;
+pub mod fileio;
+pub mod bench;
+pub mod datagen;
+pub mod dibio;
+extern crate zstd;
 extern "C" {
     pub type __dirstream;
     pub type _IO_FILE_plus;
@@ -1888,7 +1893,12 @@ unsafe extern "C" fn printVersion() -> () {
                 200112i64);
     };
 }
-#[export_name = "main"]
+#[start]
+pub fn main_x(mut argCount: isize,
+                                argv: *const *const u8) -> isize {
+    unsafe{main_0(argCount as i32, ::std::mem::transmute::<*const *const u8, *mut *const i8>(argv)) as isize}
+}
+
 pub unsafe extern "C" fn main_0(mut argCount: libc::c_int,
                                 mut argv: *mut *const libc::c_char)
  -> libc::c_int {

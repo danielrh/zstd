@@ -3834,6 +3834,8 @@ unsafe extern "C" fn FIO_fwriteSparseEnd(mut file: *mut FILE,
         }
     };
 }
+static mut maskT: size_t = 0;
+static mut segmentSizeT: size_t = 0;
 /* * FIO_fwriteSparse() :
 *   @return : storedSkips, to be provided to next call to FIO_fwriteSparse() of LZ4IO_fwriteSparseEnd() */
 unsafe extern "C" fn FIO_fwriteSparse(mut file: *mut FILE,
@@ -3847,7 +3849,6 @@ unsafe extern "C" fn FIO_fwriteSparse(mut file: *mut FILE,
                                     libc::c_ulong);
     let bufferTEnd: *const size_t = bufferT.offset(bufferSizeT as isize);
     let mut ptrT: *const size_t = bufferT;
-    static mut segmentSizeT: size_t = 0;
     if 0 == g_sparseFileSupport {
         let sizeCheck: size_t =
             fwrite(buffer, 1i32 as size_t, bufferSize, file);
@@ -3993,7 +3994,7 @@ unsafe extern "C" fn FIO_fwriteSparse(mut file: *mut FILE,
             }
             ptrT = ptrT.offset(seg0SizeT as isize)
         }
-        static mut maskT: size_t = 0;
+
         if 0 != bufferSize & maskT {
             let restStart: *const libc::c_char =
                 bufferTEnd as *const libc::c_char;

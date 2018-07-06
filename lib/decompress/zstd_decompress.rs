@@ -849,9 +849,13 @@ unsafe extern "C" fn ZSTD_cpuid_avx2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
 unsafe extern "C" fn ZSTD_cpuid_smep(cpuid: ZSTD_cpuid_t) -> libc::c_int {
     return (cpuid.f7b & 1u32 << 7i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
-unsafe extern "C" fn ZSTD_cpuid_bmi2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
-    return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
+unsafe extern "C" fn ZSTD_cpuid_bmi2() -> libc::c_int {
+    is_x86_feature_detected!("bmi2") as libc::c_int
+        //return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
+/*unsafe extern "C" fn ZSTD_cpuid_bmi2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
+    return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
+}*/
 unsafe extern "C" fn ZSTD_cpuid_erms(cpuid: ZSTD_cpuid_t) -> libc::c_int {
     return (cpuid.f7b & 1u32 << 9i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
@@ -1532,7 +1536,7 @@ unsafe extern "C" fn ZSTD_initDCtx_internal(mut dctx: *mut ZSTD_DCtx) -> () {
     (*dctx).legacyContext = 0 as *mut libc::c_void;
     (*dctx).previousLegacyVersion = 0i32 as U32;
     (*dctx).noForwardProgress = 0i32;
-    (*dctx).bmi2 = ZSTD_cpuid_bmi2(ZSTD_cpuid());
+    (*dctx).bmi2 = ZSTD_cpuid_bmi2();
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_freeDCtx(mut dctx: *mut ZSTD_DCtx) -> size_t {

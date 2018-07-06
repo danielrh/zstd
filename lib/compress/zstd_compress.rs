@@ -1595,8 +1595,9 @@ unsafe extern "C" fn ZSTD_cpuid_avx2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
 unsafe extern "C" fn ZSTD_cpuid_smep(cpuid: ZSTD_cpuid_t) -> libc::c_int {
     return (cpuid.f7b & 1u32 << 7i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
-unsafe extern "C" fn ZSTD_cpuid_bmi2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
-    return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
+unsafe extern "C" fn ZSTD_cpuid_bmi2() -> libc::c_int {
+    is_x86_feature_detected!("bmi2") as libc::c_int
+        //return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
 unsafe extern "C" fn ZSTD_cpuid_erms(cpuid: ZSTD_cpuid_t) -> libc::c_int {
     return (cpuid.f7b & 1u32 << 9i32 != 0i32 as libc::c_uint) as libc::c_int;
@@ -3211,14 +3212,14 @@ static mut ZSTD_defaultCParameters: [[ZSTD_compressionParameters; 23]; 4] =
                                      targetLength: 512i32 as libc::c_uint,
                                      strategy: ZSTD_btultra,}]]
     };
+static mut minSrcSize: U64 = unsafe { 513i32 as U64 };
+static mut maxWindowResize: U64 = 0;
 unsafe extern "C" fn ZSTD_adjustCParams_internal(mut cPar:
                                                      ZSTD_compressionParameters,
                                                  mut srcSize:
                                                      libc::c_ulonglong,
                                                  mut dictSize: size_t)
  -> ZSTD_compressionParameters {
-    static mut minSrcSize: U64 = unsafe { 513i32 as U64 };
-    static mut maxWindowResize: U64 = 0;
     if 0 != dictSize &&
            srcSize.wrapping_add(1i32 as libc::c_ulonglong) <
                2i32 as libc::c_ulonglong {
@@ -6506,7 +6507,7 @@ unsafe extern "C" fn ZSTD_initCCtx(mut cctx: *mut ZSTD_CCtx,
     memset(cctx as *mut libc::c_void, 0i32,
            ::std::mem::size_of::<ZSTD_CCtx>() as libc::c_ulong);
     (*cctx).customMem = memManager;
-    (*cctx).bmi2 = ZSTD_cpuid_bmi2(ZSTD_cpuid());
+    (*cctx).bmi2 = ZSTD_cpuid_bmi2();
     let err: size_t = ZSTD_CCtx_resetParameters(cctx);
 }
 #[no_mangle]
@@ -7535,7 +7536,7 @@ pub unsafe extern "C" fn ZSTD_initStaticCCtx(mut workspace: *mut libc::c_void,
                 (*cctx).blockState.nextCBlock.offset(1isize) as
                     *mut libc::c_void;
             (*cctx).entropyWorkspace = ptr as *mut U32;
-            (*cctx).bmi2 = ZSTD_cpuid_bmi2(ZSTD_cpuid());
+            (*cctx).bmi2 = ZSTD_cpuid_bmi2();
             return cctx
         }
     };
