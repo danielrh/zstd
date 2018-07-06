@@ -41,97 +41,29 @@ extern "C" {
                      tableLogPtr: *mut U32, src: *const libc::c_void,
                      srcSize: size_t) -> size_t;
 }
-pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
-pub type BYTE = uint8_t;
-pub const ZSTD_error_init_missing: ERR_enum = 62;
-pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
-pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
+pub const ZSTD_error_no_error: ZSTD_ErrorCode = 0;
+pub type HUF_DTable = U32;
+pub const ZSTD_error_frameParameter_windowTooLarge: ZSTD_ErrorCode = 16;
+pub const ZSTD_error_maxCode: ZSTD_ErrorCode = 120;
+pub const ZSTD_error_checksum_wrong: ZSTD_ErrorCode = 22;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct DTableDesc {
-    pub maxTableLog: BYTE,
-    pub tableType: BYTE,
-    pub tableLog: BYTE,
-    pub reserved: BYTE,
-}
-pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
-pub const ZSTD_error_no_error: ERR_enum = 0;
-pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
-pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
-pub type ZSTD_ErrorCode = ERR_enum;
-pub const BIT_DStream_completed: BIT_DStream_status = 2;
-pub type BIT_DStream_status = libc::c_uint;
-pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
-pub type uint32_t = libc::c_uint;
-pub type size_t = libc::c_ulong;
-pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
-}
-pub type decompressionAlgo =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t,
-                                _: *const libc::c_void, _: size_t) -> size_t>;
-pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
-pub type unnamed = libc::c_uint;
-pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
-pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
-pub const ZSTD_error_GENERIC: ERR_enum = 1;
-pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
-pub type ERR_enum = libc::c_uint;
-pub const ZSTD_error_stage_wrong: ERR_enum = 60;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct HUF_DEltX2 {
-    pub sequence: U16,
+pub struct HUF_DEltX1 {
+    pub byte: BYTE,
     pub nbBits: BYTE,
-    pub length: BYTE,
 }
-pub const ZSTD_error_version_unsupported: ERR_enum = 12;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct sortedSymbol_t {
-    pub symbol: BYTE,
-    pub weight: BYTE,
-}
-pub const ZSTD_error_corruption_detected: ERR_enum = 20;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-pub type uint64_t = libc::c_ulong;
-pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
-pub type U32 = uint32_t;
-pub const ZSTD_error_maxCode: ERR_enum = 120;
-pub const ZSTD_error_memory_allocation: ERR_enum = 64;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub const MEM_static_assert: unnamed = 1;
-pub type uint16_t = libc::c_ushort;
-pub type rankValCol_t = [U32; 13];
-pub type U64 = uint64_t;
-pub const BIT_DStream_overflow: BIT_DStream_status = 3;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union unnamed_0 {
-    u: U32,
-    c: [BYTE; 4],
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct BIT_DStream_t {
-    pub bitContainer: size_t,
-    pub bitsConsumed: libc::c_uint,
-    pub ptr: *const libc::c_char,
-    pub start: *const libc::c_char,
-    pub limitPtr: *const libc::c_char,
-}
-pub type unnamed_1 = libc::c_uint;
+pub const ZSTD_error_seekableIO: ZSTD_ErrorCode = 102;
+pub const ZSTD_error_maxSymbolValue_tooSmall: ZSTD_ErrorCode = 48;
+pub const MEM_static_assert: unnamed_0 = 1;
+pub const ZSTD_error_maxSymbolValue_tooLarge: ZSTD_ErrorCode = 46;
+pub const ZSTD_error_tableLog_tooLarge: ZSTD_ErrorCode = 44;
+pub const ZSTD_error_workSpace_tooSmall: ZSTD_ErrorCode = 66;
+pub type uint32_t = libc::c_uint;
+pub type unnamed = libc::c_uint;
+pub const ZSTD_error_frameParameter_unsupported: ZSTD_ErrorCode = 14;
+pub type BYTE = uint8_t;
+pub type U16 = uint16_t;
+pub const ZSTD_error_dstSize_tooSmall: ZSTD_ErrorCode = 70;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct BIT_CStream_t {
@@ -141,33 +73,101 @@ pub struct BIT_CStream_t {
     pub ptr: *mut libc::c_char,
     pub endPtr: *mut libc::c_char,
 }
-pub const ZSTD_error_seekableIO: ERR_enum = 102;
+pub type BIT_DStream_status = libc::c_uint;
+pub type U64 = uint64_t;
+pub type uint64_t = libc::c_ulong;
+pub const BIT_DStream_overflow: BIT_DStream_status = 3;
+pub type decompressionAlgo =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t,
+                                _: *const libc::c_void, _: size_t) -> size_t>;
+pub const ZSTD_error_init_missing: ZSTD_ErrorCode = 62;
+pub const ZSTD_error_stage_wrong: ZSTD_ErrorCode = 60;
+pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign64 {
+    pub v: U64,
+}
+pub type rankValCol_t = [U32; 13];
+pub const ZSTD_error_prefix_unknown: ZSTD_ErrorCode = 10;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+pub type uint16_t = libc::c_ushort;
+pub type ZSTD_ErrorCode = libc::c_uint;
+pub const ZSTD_error_parameter_outOfBound: ZSTD_ErrorCode = 42;
+pub const ZSTD_error_corruption_detected: ZSTD_ErrorCode = 20;
+pub const ZSTD_error_parameter_unsupported: ZSTD_ErrorCode = 40;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct HUF_DEltX1 {
-    pub byte: BYTE,
-    pub nbBits: BYTE,
+pub struct DTableDesc {
+    pub maxTableLog: BYTE,
+    pub tableType: BYTE,
+    pub tableLog: BYTE,
+    pub reserved: BYTE,
 }
-pub type HUF_DTable = U32;
-pub type uint8_t = libc::c_uchar;
-pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub const ZSTD_error_dictionaryCreation_failed: ZSTD_ErrorCode = 34;
+pub type unnamed_0 = libc::c_uint;
+pub type size_t = libc::c_ulong;
+pub const ZSTD_error_frameIndex_tooLarge: ZSTD_ErrorCode = 100;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct HUF_DEltX2 {
+    pub sequence: U16,
+    pub nbBits: BYTE,
+    pub length: BYTE,
+}
+pub const ZSTD_error_dictionary_corrupted: ZSTD_ErrorCode = 30;
+pub type U32 = uint32_t;
+pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
+pub type ERR_enum = ZSTD_ErrorCode;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union unnamed_1 {
+    u: U32,
+    c: [BYTE; 4],
+}
+pub const MEM_static_assert_0: unnamed = 1;
+pub const ZSTD_error_srcSize_wrong: ZSTD_ErrorCode = 72;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct algo_time_t {
     pub tableTime: U32,
     pub decode256Time: U32,
 }
-pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
-pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
+pub const ZSTD_error_dictionary_wrong: ZSTD_ErrorCode = 32;
+pub const BIT_DStream_completed: BIT_DStream_status = 2;
+pub const ZSTD_error_memory_allocation: ZSTD_ErrorCode = 64;
+pub const ZSTD_error_GENERIC: ZSTD_ErrorCode = 1;
+pub type uint8_t = libc::c_uchar;
+pub const ZSTD_error_version_unsupported: ZSTD_ErrorCode = 12;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct BIT_DStream_t {
+    pub bitContainer: size_t,
+    pub bitsConsumed: libc::c_uint,
+    pub ptr: *const libc::c_char,
+    pub start: *const libc::c_char,
+    pub limitPtr: *const libc::c_char,
+}
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
+pub struct unalignArch {
+    pub v: size_t,
 }
-pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
-pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
-pub type U16 = uint16_t;
-pub const MEM_static_assert_0: unnamed_1 = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct sortedSymbol_t {
+    pub symbol: BYTE,
+    pub weight: BYTE,
+}
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -178,7 +178,7 @@ unsafe extern "C" fn MEM_64bits() -> libc::c_uint {
                 8i32 as libc::c_ulong) as libc::c_int as libc::c_uint;
 }
 unsafe extern "C" fn MEM_isLittleEndian() -> libc::c_uint {
-    let one: unnamed_0 = unnamed_0{u: 1i32 as U32,};
+    let one: unnamed_1 = unnamed_1{u: 1i32 as U32,};
     return one.c[0usize] as libc::c_uint;
 }
 unsafe extern "C" fn MEM_read16(mut ptr: *const libc::c_void) -> U16 {

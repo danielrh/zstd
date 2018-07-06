@@ -13,13 +13,6 @@ extern "C" {
     #[no_mangle]
     fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong)
      -> *mut libc::c_void;
-    /* *< recommended size for output buffer. Guarantee to successfully flush at least one complete compressed block in all circumstances. */
-    /* *< recommended size for input buffer */
-    /* ! Constructor and Destructor of FSE_CTable.
-    Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
-    /* ! Constructor and Destructor of FSE_DTable.
-    Note that its size depends on 'tableLog' */
-    /* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
     /* ***************************
 *  Streaming
 ****************************/
@@ -31,12 +24,19 @@ extern "C" {
     /* ! ZSTD_createDDict() :
  *  Create a digested dictionary, ready to start decompression operation without startup delay.
  *  dictBuffer can be released after DDict creation, as its content is copied inside DDict */
-    /* *< Copy dictionary content internally */
+    /* ! Constructor and Destructor of FSE_DTable.
+    Note that its size depends on 'tableLog' */
+    /* *< recommended size for output buffer. Guarantee to successfully flush at least one complete compressed block in all circumstances. */
+    /* *< recommended size for input buffer */
+    /* ! Constructor and Destructor of FSE_CTable.
+    Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
     /* ! Custom memory allocation :
  *  These prototypes make it possible to pass your own allocation/free functions.
  *  ZSTD_customMem is provided at creation time, using ZSTD_create*_advanced() variants listed below.
  *  All allocation/free operations will be completed using these custom variants instead of regular <stdlib.h> ones.
  */
+    /* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
+    /* *< Copy dictionary content internally */
     /* ! FSE_readNCount():
     Read compactly saved 'normalizedCounter' from 'rBuffer'.
     @return : size read from 'rBuffer',
@@ -146,25 +146,22 @@ If there is an error, the function will return an ErrorCode (which can be tested
     fn ZSTD_XXH64_reset(statePtr: *mut XXH64_state_t, seed: libc::c_ulonglong)
      -> XXH_errorcode;
 }
-pub type ZSTD_frameType_e = libc::c_uint;
-pub type ZSTD_dStreamStage = libc::c_uint;
-pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
-pub const ZSTDnit_lastBlock: ZSTD_nextInputType_e = 3;
-pub const ZSTD_lo_isRegularOffset: ZSTD_longOffset_e = 0;
-pub type XXH64_hash_t = libc::c_ulonglong;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
+pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
+pub type U64 = uint64_t;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct blockProperties_t {
-    pub blockType: blockType_e,
-    pub lastBlock: U32,
-    pub origSize: U32,
+pub struct BIT_CStream_t {
+    pub bitContainer: size_t,
+    pub bitPos: libc::c_uint,
+    pub startPtr: *mut libc::c_char,
+    pub ptr: *mut libc::c_char,
+    pub endPtr: *mut libc::c_char,
 }
+pub const bt_reserved: blockType_e = 3;
+pub const set_compressed: symbolEncodingType_e = 2;
+pub type HUF_DTable = U32;
+pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
+pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_frameHeader {
@@ -176,106 +173,7 @@ pub struct ZSTD_frameHeader {
     pub dictID: libc::c_uint,
     pub checksumFlag: libc::c_uint,
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_cpuid_t {
-    pub f1c: U32,
-    pub f1d: U32,
-    pub f7b: U32,
-    pub f7c: U32,
-}
-pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
-pub const set_compressed: symbolEncodingType_e = 2;
-pub const zdss_flush: ZSTD_dStreamStage = 4;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
-pub const ZSTD_error_maxCode: ERR_enum = 120;
-pub const ZSTD_f_zstd1_magicless: ZSTD_format_e = 1;
-pub const zdss_load: ZSTD_dStreamStage = 3;
-pub type ZSTD_DStream = ZSTD_DCtx;
-pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
-pub const ZSTD_dct_rawContent: ZSTD_dictContentType_e = 1;
-pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
-pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
-pub const bt_compressed: blockType_e = 2;
-pub const ZSTDds_checkChecksum: ZSTD_dStage = 5;
-pub const ZSTDds_decompressBlock: ZSTD_dStage = 3;
-pub type ZSTD_dictLoadMethod_e = libc::c_uint;
-pub const ZSTD_error_version_unsupported: ERR_enum = 12;
-pub const zdss_init: ZSTD_dStreamStage = 0;
-pub const ZSTD_error_GENERIC: ERR_enum = 1;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_seqSymbol_header {
-    pub fastMode: U32,
-    pub tableLog: U32,
-}
-pub type XXH64_state_t = XXH64_state_s;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_outBuffer_s {
-    pub dst: *mut libc::c_void,
-    pub size: size_t,
-    pub pos: size_t,
-}
-pub const ZSTD_error_init_missing: ERR_enum = 62;
-pub type ZSTD_format_e = libc::c_uint;
-pub type BYTE = uint8_t;
-pub const XXH_OK: XXH_errorcode = 0;
-pub type ZSTD_dStage = libc::c_uint;
-pub type FSE_CTable = libc::c_uint;
-pub const MEM_static_assert: unnamed_0 = 1;
-pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
-pub const ZSTD_error_seekableIO: ERR_enum = 102;
-pub type FSE_DTable = libc::c_uint;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DState_t {
-    pub state: size_t,
-    pub table: *const libc::c_void,
-}
-pub type uint32_t = libc::c_uint;
-pub const DStream_p_maxWindowSize: ZSTD_DStreamParameter_e = 0;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_CState_t {
-    pub value: ptrdiff_t,
-    pub stateTable: *const libc::c_void,
-    pub symbolTT: *const libc::c_void,
-    pub stateLog: libc::c_uint,
-}
-pub type ZSTD_DCtx = ZSTD_DCtx_s;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union unnamed {
-    u: U32,
-    c: [BYTE; 4],
-}
-pub type U32 = uint32_t;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_decode_t {
-    pub newState: libc::c_ushort,
-    pub symbol: libc::c_uchar,
-    pub nbBits: libc::c_uchar,
-}
-pub const BIT_DStream_completed: BIT_DStream_status = 2;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DTableHeader {
-    pub tableLog: U16,
-    pub fastMode: U16,
-}
-pub const ZSTD_error_corruption_detected: ERR_enum = 20;
+pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_entropyDTables_t {
@@ -286,62 +184,55 @@ pub struct ZSTD_entropyDTables_t {
     pub workspace: [U32; 512],
     pub rep: [U32; 3],
 }
-pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
+pub const ZSTDnit_block: ZSTD_nextInputType_e = 2;
+pub const ZSTD_dct_fullDict: ZSTD_dictContentType_e = 2;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct BIT_DStream_t {
-    pub bitContainer: size_t,
-    pub bitsConsumed: libc::c_uint,
-    pub ptr: *const libc::c_char,
-    pub start: *const libc::c_char,
-    pub limitPtr: *const libc::c_char,
+pub struct blockProperties_t {
+    pub blockType: blockType_e,
+    pub lastBlock: U32,
+    pub origSize: U32,
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_inBuffer_s {
-    pub src: *const libc::c_void,
-    pub size: size_t,
-    pub pos: size_t,
-}
-pub type uint8_t = libc::c_uchar;
+pub const zdss_load: ZSTD_dStreamStage = 3;
+pub const ZSTD_error_init_missing: ERR_enum = 62;
 pub type ZSTD_freeFunction =
     Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
                -> ()>;
-pub const ZSTDnit_frameHeader: ZSTD_nextInputType_e = 0;
+pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
 pub type U16 = uint16_t;
-pub const ZSTD_error_memory_allocation: ERR_enum = 64;
-pub const set_rle: symbolEncodingType_e = 1;
-pub const ZSTDds_getFrameHeaderSize: ZSTD_dStage = 0;
-pub const ZSTD_frame: ZSTD_frameType_e = 0;
+pub type uint64_t = libc::c_ulong;
+pub type blockType_e = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_seqSymbol_header {
+    pub fastMode: U32,
+    pub tableLog: U32,
+}
+pub const zdss_read: ZSTD_dStreamStage = 2;
+pub type ZSTD_DDict = ZSTD_DDict_s;
+pub const set_basic: symbolEncodingType_e = 0;
 pub const bt_rle: blockType_e = 1;
-pub const bt_raw: blockType_e = 0;
-pub const ZSTD_dlm_byCopy: ZSTD_dictLoadMethod_e = 0;
-pub type ZSTD_ErrorCode = ERR_enum;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct BIT_CStream_t {
-    pub bitContainer: size_t,
-    pub bitPos: libc::c_uint,
-    pub startPtr: *mut libc::c_char,
-    pub ptr: *mut libc::c_char,
-    pub endPtr: *mut libc::c_char,
-}
-pub const ZSTD_error_no_error: ERR_enum = 0;
+pub type XXH64_state_t = XXH64_state_s;
+pub const ZSTD_lo_isRegularOffset: ZSTD_longOffset_e = 0;
 pub const ZSTDnit_checksum: ZSTD_nextInputType_e = 4;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_symbolCompressionTransform {
-    pub deltaFindState: libc::c_int,
-    pub deltaNbBits: U32,
-}
-pub type int16_t = libc::c_short;
-pub const ZSTDnit_blockHeader: ZSTD_nextInputType_e = 1;
-pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
+pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
+pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
+pub const bt_raw: blockType_e = 0;
+pub const ZSTD_error_corruption_detected: ERR_enum = 20;
+pub type FSE_DTable = libc::c_uint;
+pub type ZSTD_dictContentType_e = libc::c_uint;
+pub const ZSTDds_decompressBlock: ZSTD_dStage = 3;
 pub const set_repeat: symbolEncodingType_e = 3;
-pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+pub const ZSTD_error_GENERIC: ERR_enum = 1;
+pub type ERR_enum = libc::c_uint;
+pub const ZSTD_f_zstd1_magicless: ZSTD_format_e = 1;
 pub type BIT_DStream_status = libc::c_uint;
-pub type U64 = uint64_t;
-pub const ZSTDnit_block: ZSTD_nextInputType_e = 2;
+pub type size_t = libc::c_ulong;
+pub const ZSTD_lo_isLongOffset: ZSTD_longOffset_e = 1;
+pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
+pub type ZSTD_DStream = ZSTD_DCtx;
+pub const DStream_p_maxWindowSize: ZSTD_DStreamParameter_e = 0;
+pub const MEM_static_assert: unnamed_1 = 1;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_customMem {
@@ -349,50 +240,8 @@ pub struct ZSTD_customMem {
     pub customFree: ZSTD_freeFunction,
     pub opaque: *mut libc::c_void,
 }
-pub const ZSTDds_decodeBlockHeader: ZSTD_dStage = 2;
-pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
-pub const XXH_ERROR: XXH_errorcode = 1;
-pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
-pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
-pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
-pub const ZSTDds_skipFrame: ZSTD_dStage = 7;
-pub type blockType_e = libc::c_uint;
-pub type ZSTD_longOffset_e = libc::c_uint;
-pub const set_basic: symbolEncodingType_e = 0;
-pub const ZSTDnit_skippableFrame: ZSTD_nextInputType_e = 5;
-pub type unnamed_0 = libc::c_uint;
-pub const ZSTD_lo_isLongOffset: ZSTD_longOffset_e = 1;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_DDict_s {
-    pub dictBuffer: *mut libc::c_void,
-    pub dictContent: *const libc::c_void,
-    pub dictSize: size_t,
-    pub entropy: ZSTD_entropyDTables_t,
-    pub dictID: U32,
-    pub entropyPresent: U32,
-    pub cMem: ZSTD_customMem,
-}
-pub const ZSTD_dct_auto: ZSTD_dictContentType_e = 0;
-pub type unnamed_1 = libc::c_uint;
-pub const zdss_read: ZSTD_dStreamStage = 2;
-pub type ERR_enum = libc::c_uint;
-pub const ZSTD_skippableFrame: ZSTD_frameType_e = 1;
-pub type HUF_DTable = U32;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct seq_t {
-    pub litLength: size_t,
-    pub matchLength: size_t,
-    pub offset: size_t,
-    pub match_0: *const BYTE,
-}
-pub type S16 = int16_t;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
-}
+pub const ZSTD_error_no_error: ERR_enum = 0;
+pub const ZSTDds_checkChecksum: ZSTD_dStage = 5;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct seqState_t {
@@ -405,7 +254,173 @@ pub struct seqState_t {
     pub dictEnd: *const BYTE,
     pub pos: size_t,
 }
-pub type ZSTD_dictContentType_e = libc::c_uint;
+pub const BIT_DStream_completed: BIT_DStream_status = 2;
+pub const ZSTD_error_version_unsupported: ERR_enum = 12;
+pub type U32 = uint32_t;
+pub const ZSTD_dlm_byCopy: ZSTD_dictLoadMethod_e = 0;
+pub const zdss_init: ZSTD_dStreamStage = 0;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_outBuffer_s {
+    pub dst: *mut libc::c_void,
+    pub size: size_t,
+    pub pos: size_t,
+}
+pub type ZSTD_frameType_e = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_decode_t {
+    pub newState: libc::c_ushort,
+    pub symbol: libc::c_uchar,
+    pub nbBits: libc::c_uchar,
+}
+pub type FSE_CTable = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DTableHeader {
+    pub tableLog: U16,
+    pub fastMode: U16,
+}
+pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
+pub type ZSTD_DCtx = ZSTD_DCtx_s;
+pub const ZSTDnit_lastBlock: ZSTD_nextInputType_e = 3;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_inBuffer_s {
+    pub src: *const libc::c_void,
+    pub size: size_t,
+    pub pos: size_t,
+}
+pub type int16_t = libc::c_short;
+pub const zdss_flush: ZSTD_dStreamStage = 4;
+pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
+pub const set_rle: symbolEncodingType_e = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union unnamed {
+    u: U32,
+    c: [BYTE; 4],
+}
+pub const XXH_OK: XXH_errorcode = 0;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign64 {
+    pub v: U64,
+}
+pub type XXH64_hash_t = libc::c_ulonglong;
+pub const XXH_ERROR: XXH_errorcode = 1;
+pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
+pub const ZSTD_frame: ZSTD_frameType_e = 0;
+pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+pub type ZSTD_dStreamStage = libc::c_uint;
+pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
+pub type ZSTD_ErrorCode = ERR_enum;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub const ZSTDds_decompressLastBlock: ZSTD_dStage = 4;
+pub type ZSTD_allocFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
+               -> *mut libc::c_void>;
+pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
+pub type ZSTD_nextInputType_e = libc::c_uint;
+pub const MEM_static_assert_0: unnamed_0 = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_cpuid_t {
+    pub f1c: U32,
+    pub f1d: U32,
+    pub f7b: U32,
+    pub f7c: U32,
+}
+pub type ZSTD_longOffset_e = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_seqSymbol {
+    pub nextState: U16,
+    pub nbAdditionalBits: BYTE,
+    pub nbBits: BYTE,
+    pub baseValue: U32,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_fseState {
+    pub state: size_t,
+    pub table: *const ZSTD_seqSymbol,
+}
+pub type XXH_errorcode = libc::c_uint;
+pub type ZSTD_format_e = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalignArch {
+    pub v: size_t,
+}
+pub const ZSTDds_getFrameHeaderSize: ZSTD_dStage = 0;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_DDict_s {
+    pub dictBuffer: *mut libc::c_void,
+    pub dictContent: *const libc::c_void,
+    pub dictSize: size_t,
+    pub entropy: ZSTD_entropyDTables_t,
+    pub dictID: U32,
+    pub entropyPresent: U32,
+    pub cMem: ZSTD_customMem,
+}
+pub const BIT_DStream_overflow: BIT_DStream_status = 3;
+pub const ZSTD_dct_auto: ZSTD_dictContentType_e = 0;
+pub const ZSTD_error_stage_wrong: ERR_enum = 60;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_symbolCompressionTransform {
+    pub deltaFindState: libc::c_int,
+    pub deltaNbBits: U32,
+}
+pub const bt_compressed: blockType_e = 2;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct XXH64_state_s {
+    pub total_len: libc::c_ulonglong,
+    pub v1: libc::c_ulonglong,
+    pub v2: libc::c_ulonglong,
+    pub v3: libc::c_ulonglong,
+    pub v4: libc::c_ulonglong,
+    pub mem64: [libc::c_ulonglong; 4],
+    pub memsize: libc::c_uint,
+    pub reserved: [libc::c_uint; 2],
+}
+pub const ZSTD_error_maxCode: ERR_enum = 120;
+pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
+pub const ZSTD_f_zstd1: ZSTD_format_e = 0;
+pub const ZSTD_skippableFrame: ZSTD_frameType_e = 1;
+pub type BYTE = uint8_t;
+pub type S16 = int16_t;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DState_t {
+    pub state: size_t,
+    pub table: *const libc::c_void,
+}
+pub type ZSTD_dictLoadMethod_e = libc::c_uint;
+pub const ZSTDds_decodeBlockHeader: ZSTD_dStage = 2;
+pub const ZSTDds_decodeFrameHeader: ZSTD_dStage = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct seq_t {
+    pub litLength: size_t,
+    pub matchLength: size_t,
+    pub offset: size_t,
+    pub match_0: *const BYTE,
+}
+pub const ZSTD_error_memory_allocation: ERR_enum = 64;
+pub type uint16_t = libc::c_ushort;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_DCtx_s {
@@ -455,60 +470,45 @@ pub struct ZSTD_DCtx_s {
     pub litBuffer: [BYTE; 131080],
     pub headerBuffer: [BYTE; 18],
 }
-pub const ZSTD_f_zstd1: ZSTD_format_e = 0;
-pub type size_t = libc::c_ulong;
-pub type ZSTD_DDict = ZSTD_DDict_s;
-pub const ZSTDds_decodeSkippableHeader: ZSTD_dStage = 6;
-pub const ZSTD_dlm_byRef: ZSTD_dictLoadMethod_e = 1;
-pub type ptrdiff_t = libc::c_long;
-pub const BIT_DStream_overflow: BIT_DStream_status = 3;
-pub type XXH_errorcode = libc::c_uint;
-pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_seqSymbol {
-    pub nextState: U16,
-    pub nbAdditionalBits: BYTE,
-    pub nbBits: BYTE,
-    pub baseValue: U32,
-}
-pub type uint16_t = libc::c_ushort;
-pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
-pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
-pub const MEM_static_assert_0: unnamed_1 = 1;
-pub const ZSTD_error_stage_wrong: ERR_enum = 60;
-pub const zdss_loadHeader: ZSTD_dStreamStage = 1;
-pub type ZSTD_nextInputType_e = libc::c_uint;
+pub const ZSTDnit_skippableFrame: ZSTD_nextInputType_e = 5;
+pub type uint8_t = libc::c_uchar;
 pub type ZSTD_DStreamParameter_e = libc::c_uint;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_fseState {
-    pub state: size_t,
-    pub table: *const ZSTD_seqSymbol,
-}
-pub type ZSTD_allocFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
-               -> *mut libc::c_void>;
-pub const ZSTDds_decompressLastBlock: ZSTD_dStage = 4;
-pub const ZSTD_dct_fullDict: ZSTD_dictContentType_e = 2;
-pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
-pub type uint64_t = libc::c_ulong;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct XXH64_state_s {
-    pub total_len: libc::c_ulonglong,
-    pub v1: libc::c_ulonglong,
-    pub v2: libc::c_ulonglong,
-    pub v3: libc::c_ulonglong,
-    pub v4: libc::c_ulonglong,
-    pub mem64: [libc::c_ulonglong; 4],
-    pub memsize: libc::c_uint,
-    pub reserved: [libc::c_uint; 2],
-}
-pub const bt_reserved: blockType_e = 3;
+pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
+pub type unnamed_0 = libc::c_uint;
+pub type unnamed_1 = libc::c_uint;
+pub type uint32_t = libc::c_uint;
 pub type symbolEncodingType_e = libc::c_uint;
-pub const ZSTDds_decodeFrameHeader: ZSTD_dStage = 1;
-pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_CState_t {
+    pub value: ptrdiff_t,
+    pub stateTable: *const libc::c_void,
+    pub symbolTT: *const libc::c_void,
+    pub stateLog: libc::c_uint,
+}
+pub const ZSTDds_skipFrame: ZSTD_dStage = 7;
+pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
+pub const ZSTD_dct_rawContent: ZSTD_dictContentType_e = 1;
+pub const ZSTDnit_frameHeader: ZSTD_nextInputType_e = 0;
+pub const ZSTD_dlm_byRef: ZSTD_dictLoadMethod_e = 1;
+pub type ZSTD_dStage = libc::c_uint;
+pub const ZSTDds_decodeSkippableHeader: ZSTD_dStage = 6;
+pub const zdss_loadHeader: ZSTD_dStreamStage = 1;
+pub const ZSTDnit_blockHeader: ZSTD_nextInputType_e = 1;
+pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
+pub type ptrdiff_t = libc::c_long;
+pub const ZSTD_error_seekableIO: ERR_enum = 102;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct BIT_DStream_t {
+    pub bitContainer: size_t,
+    pub bitsConsumed: libc::c_uint,
+    pub ptr: *const libc::c_char,
+    pub start: *const libc::c_char,
+    pub limitPtr: *const libc::c_char,
+}
+pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
+pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -2549,6 +2549,173 @@ unsafe extern "C" fn ZSTD_decompressSequencesLong_default(mut dctx:
     return ZSTD_decompressSequencesLong_body(dctx, dst, maxDstSize, seqStart,
                                              seqSize, nbSeq, isLongOffset);
 }
+unsafe extern "C" fn ZSTD_decompressSequencesLong_body(mut dctx:
+                                                           *mut ZSTD_DCtx,
+                                                       mut dst:
+                                                           *mut libc::c_void,
+                                                       mut maxDstSize: size_t,
+                                                       mut seqStart:
+                                                           *const libc::c_void,
+                                                       mut seqSize: size_t,
+                                                       mut nbSeq: libc::c_int,
+                                                       isLongOffset:
+                                                           ZSTD_longOffset_e)
+ -> size_t {
+    let mut ip: *const BYTE = seqStart as *const BYTE;
+    let iend: *const BYTE = ip.offset(seqSize as isize);
+    let ostart: *mut BYTE = dst as *mut BYTE;
+    let oend: *mut BYTE = ostart.offset(maxDstSize as isize);
+    let mut op: *mut BYTE = ostart;
+    let mut litPtr: *const BYTE = (*dctx).litPtr;
+    let litEnd: *const BYTE = litPtr.offset((*dctx).litSize as isize);
+    let prefixStart: *const BYTE = (*dctx).prefixStart as *const BYTE;
+    let dictStart: *const BYTE = (*dctx).virtualStart as *const BYTE;
+    let dictEnd: *const BYTE = (*dctx).dictEnd as *const BYTE;
+    if 0 != nbSeq {
+        let mut sequences: [seq_t; 4] =
+            [seq_t{litLength: 0,
+                   matchLength: 0,
+                   offset: 0,
+                   match_0: 0 as *const BYTE,}; 4];
+        let seqAdvance: libc::c_int = if nbSeq < 4i32 { nbSeq } else { 4i32 };
+        let mut seqState: seqState_t =
+            seqState_t{DStream:
+                           BIT_DStream_t{bitContainer: 0,
+                                         bitsConsumed: 0,
+                                         ptr: 0 as *const libc::c_char,
+                                         start: 0 as *const libc::c_char,
+                                         limitPtr: 0 as *const libc::c_char,},
+                       stateLL:
+                           ZSTD_fseState{state: 0,
+                                         table: 0 as *const ZSTD_seqSymbol,},
+                       stateOffb:
+                           ZSTD_fseState{state: 0,
+                                         table: 0 as *const ZSTD_seqSymbol,},
+                       stateML:
+                           ZSTD_fseState{state: 0,
+                                         table: 0 as *const ZSTD_seqSymbol,},
+                       prevOffset: [0; 3],
+                       prefixStart: 0 as *const BYTE,
+                       dictEnd: 0 as *const BYTE,
+                       pos: 0,};
+        let mut seqNb: libc::c_int = 0;
+        (*dctx).fseEntropy = 1i32 as U32;
+        let mut i: U32 = 0;
+        i = 0i32 as U32;
+        while i < 3i32 as libc::c_uint {
+            seqState.prevOffset[i as usize] =
+                (*dctx).entropy.rep[i as usize] as size_t;
+            i = i.wrapping_add(1)
+        }
+        seqState.prefixStart = prefixStart;
+        seqState.pos =
+            prefixStart.offset_to(op).expect("bad offset_to") as libc::c_long
+                as size_t;
+        seqState.dictEnd = dictEnd;
+        let errcod: size_t =
+            BIT_initDStream(&mut seqState.DStream as *mut BIT_DStream_t,
+                            ip as *const libc::c_void,
+                            ip.offset_to(iend).expect("bad offset_to") as
+                                libc::c_long as size_t);
+        if 0 != ERR_isError(errcod) {
+            return -(ZSTD_error_corruption_detected as libc::c_int) as size_t
+        } else {
+            ZSTD_initFseState(&mut seqState.stateLL as *mut ZSTD_fseState,
+                              &mut seqState.DStream as *mut BIT_DStream_t,
+                              (*dctx).LLTptr);
+            ZSTD_initFseState(&mut seqState.stateOffb as *mut ZSTD_fseState,
+                              &mut seqState.DStream as *mut BIT_DStream_t,
+                              (*dctx).OFTptr);
+            ZSTD_initFseState(&mut seqState.stateML as *mut ZSTD_fseState,
+                              &mut seqState.DStream as *mut BIT_DStream_t,
+                              (*dctx).MLTptr);
+            seqNb = 0i32;
+            while BIT_reloadDStream(&mut seqState.DStream as
+                                        *mut BIT_DStream_t) as libc::c_uint <=
+                      BIT_DStream_completed as libc::c_int as libc::c_uint &&
+                      seqNb < seqAdvance {
+                sequences[seqNb as usize] =
+                    ZSTD_decodeSequenceLong(&mut seqState as *mut seqState_t,
+                                            isLongOffset);
+                seqNb += 1
+            }
+            if seqNb < seqAdvance {
+                return -(ZSTD_error_corruption_detected as libc::c_int) as
+                           size_t
+            } else {
+                while BIT_reloadDStream(&mut seqState.DStream as
+                                            *mut BIT_DStream_t) as
+                          libc::c_uint <=
+                          BIT_DStream_completed as libc::c_int as libc::c_uint
+                          && seqNb < nbSeq {
+                    let sequence: seq_t =
+                        ZSTD_decodeSequenceLong(&mut seqState as
+                                                    *mut seqState_t,
+                                                isLongOffset);
+                    let oneSeqSize: size_t =
+                        ZSTD_execSequenceLong(op, oend,
+                                              sequences[(seqNb - 4i32 &
+                                                             4i32 - 1i32) as
+                                                            usize],
+                                              &mut litPtr as *mut *const BYTE,
+                                              litEnd, prefixStart, dictStart,
+                                              dictEnd);
+                    if 0 != ERR_isError(oneSeqSize) {
+                        return oneSeqSize
+                    } else {
+                        sequences[(seqNb & 4i32 - 1i32) as usize] = sequence;
+                        op = op.offset(oneSeqSize as isize);
+                        seqNb += 1
+                    }
+                }
+                if seqNb < nbSeq {
+                    return -(ZSTD_error_corruption_detected as libc::c_int) as
+                               size_t
+                } else {
+                    seqNb -= seqAdvance;
+                    while seqNb < nbSeq {
+                        let oneSeqSize_0: size_t =
+                            ZSTD_execSequenceLong(op, oend,
+                                                  sequences[(seqNb &
+                                                                 4i32 - 1i32)
+                                                                as usize],
+                                                  &mut litPtr as
+                                                      *mut *const BYTE,
+                                                  litEnd, prefixStart,
+                                                  dictStart, dictEnd);
+                        if 0 != ERR_isError(oneSeqSize_0) {
+                            return oneSeqSize_0
+                        } else {
+                            op = op.offset(oneSeqSize_0 as isize);
+                            seqNb += 1
+                        }
+                    }
+                    let mut i_0: U32 = 0;
+                    i_0 = 0i32 as U32;
+                    while i_0 < 3i32 as libc::c_uint {
+                        (*dctx).entropy.rep[i_0 as usize] =
+                            seqState.prevOffset[i_0 as usize] as U32;
+                        i_0 = i_0.wrapping_add(1)
+                    }
+                }
+            }
+        }
+    }
+    let lastLLSize: size_t =
+        litPtr.offset_to(litEnd).expect("bad offset_to") as libc::c_long as
+            size_t;
+    if lastLLSize >
+           op.offset_to(oend).expect("bad offset_to") as libc::c_long as
+               size_t {
+        return -(ZSTD_error_dstSize_tooSmall as libc::c_int) as size_t
+    } else {
+        memcpy(op as *mut libc::c_void, litPtr as *const libc::c_void,
+               lastLLSize);
+        op = op.offset(lastLLSize as isize);
+        return ostart.offset_to(op).expect("bad offset_to") as libc::c_long as
+                   size_t
+    };
+}
 unsafe extern "C" fn ZSTD_execSequenceLong(mut op: *mut BYTE, oend: *mut BYTE,
                                            mut sequence: seq_t,
                                            mut litPtr: *mut *const BYTE,
@@ -2556,14 +2723,14 @@ unsafe extern "C" fn ZSTD_execSequenceLong(mut op: *mut BYTE, oend: *mut BYTE,
                                            prefixStart: *const BYTE,
                                            dictStart: *const BYTE,
                                            dictEnd: *const BYTE) -> size_t {
+    static mut dec64table: [libc::c_int; 8] =
+        unsafe { [8i32, 8i32, 8i32, 7i32, 8i32, 9i32, 10i32, 11i32] };
+    let mut sub2: libc::c_int = 0;
     static mut dec32table: [U32; 8] =
         unsafe {
             [0i32 as U32, 1i32 as U32, 2i32 as U32, 1i32 as U32, 4i32 as U32,
              4i32 as U32, 4i32 as U32, 4i32 as U32]
         };
-    let mut sub2: libc::c_int = 0;
-    static mut dec64table: [libc::c_int; 8] =
-        unsafe { [8i32, 8i32, 8i32, 7i32, 8i32, 9i32, 10i32, 11i32] };
     let oLitEnd: *mut BYTE = op.offset(sequence.litLength as isize);
     let sequenceLength: size_t =
         sequence.litLength.wrapping_add(sequence.matchLength);
@@ -3274,8 +3441,8 @@ unsafe extern "C" fn ZSTD_buildSeqTable(mut DTableSpace: *mut ZSTD_seqSymbol,
                                         mut defaultTable:
                                             *const ZSTD_seqSymbol,
                                         mut flagRepeatTable: U32) -> size_t {
-    let mut baseline: U32 = 0;
     let mut nbBits: U32 = 0;
+    let mut baseline: U32 = 0;
     let mut symbol: U32 = 0;
     match type_0 as libc::c_uint {
         1 => {

@@ -15,8 +15,6 @@ extern "C" {
     fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong)
      -> *mut libc::c_void;
 }
-pub const XXH_unaligned: XXH_alignment = 1;
-pub type XXH64_hash_t = libc::c_ulonglong;
 /* !
 XXH32() :
     Calculate the 32-bits hash of sequence "length" bytes stored at memory address "input".
@@ -29,34 +27,7 @@ XXH64() :
     This function runs 2x faster on 64-bits systems, but slower on 32-bits systems (see benchmark).
 */
 pub type XXH32_state_t = XXH32_state_s;
-pub type U32 = uint32_t;
-pub type uint8_t = libc::c_uchar;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct XXH64_canonical_t {
-    pub digest: [libc::c_uchar; 8],
-}
 pub type BYTE = uint8_t;
-pub type XXH_errorcode = libc::c_uint;
-pub type uint32_t = libc::c_uint;
-pub type XXH_endianess = libc::c_uint;
-pub type unnamed = libc::c_uint;
-pub type XXH_alignment = libc::c_uint;
-pub type XXH64_state_t = XXH64_state_s;
-pub const XXH_bigEndian: XXH_endianess = 0;
-pub type unnamed_0 = libc::c_uint;
-pub type size_t = libc::c_ulong;
-pub const XXH_static_assert: unnamed = 1;
-pub type XXH32_hash_t = libc::c_uint;
-pub const XXH_littleEndian: XXH_endianess = 1;
-pub type U64 = uint64_t;
-pub type uint64_t = libc::c_ulong;
-pub const XXH_ERROR: XXH_errorcode = 1;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct XXH32_canonical_t {
-    pub digest: [libc::c_uchar; 4],
-}
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct XXH32_state_s {
@@ -70,9 +41,14 @@ pub struct XXH32_state_s {
     pub memsize: libc::c_uint,
     pub reserved: libc::c_uint,
 }
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct XXH64_canonical_t {
+    pub digest: [libc::c_uchar; 8],
+}
 pub const XXH_OK: XXH_errorcode = 0;
-pub const XXH_static_assert_0: unnamed_0 = 1;
-pub const XXH_aligned: XXH_alignment = 0;
+pub type XXH32_hash_t = libc::c_uint;
+pub type XXH_errorcode = libc::c_uint;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct XXH64_state_s {
@@ -85,6 +61,30 @@ pub struct XXH64_state_s {
     pub memsize: libc::c_uint,
     pub reserved: [libc::c_uint; 2],
 }
+pub type XXH_alignment = libc::c_uint;
+pub const XXH_static_assert: unnamed_0 = 1;
+pub type size_t = libc::c_ulong;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct XXH32_canonical_t {
+    pub digest: [libc::c_uchar; 4],
+}
+pub type unnamed = libc::c_uint;
+pub type uint32_t = libc::c_uint;
+pub const XXH_littleEndian: XXH_endianess = 1;
+pub type U32 = uint32_t;
+pub type XXH_endianess = libc::c_uint;
+pub type U64 = uint64_t;
+pub type XXH64_state_t = XXH64_state_s;
+pub type unnamed_0 = libc::c_uint;
+pub const XXH_bigEndian: XXH_endianess = 0;
+pub const XXH_aligned: XXH_alignment = 0;
+pub const XXH_unaligned: XXH_alignment = 1;
+pub type uint64_t = libc::c_ulong;
+pub const XXH_ERROR: XXH_errorcode = 1;
+pub type uint8_t = libc::c_uchar;
+pub const XXH_static_assert_0: unnamed = 1;
+pub type XXH64_hash_t = libc::c_ulonglong;
 /* !XXH_FORCE_ALIGN_CHECK :
  * This is a minor performance trick, only useful with lots of very small keys.
  * It means : check for aligned/unaligned input.
@@ -862,11 +862,11 @@ pub unsafe extern "C" fn ZSTD_XXH64_digest(mut state_in: *const XXH64_state_t)
 }
 unsafe extern "C" fn XXH64_digest_endian(mut state: *const XXH64_state_t,
                                          mut endian: XXH_endianess) -> U64 {
+    let mut v1: U64 = 0;
     let mut v3: U64 = 0;
+    let mut k1: U64 = 0;
     let mut v2: U64 = 0;
     let mut v4: U64 = 0;
-    let mut k1: U64 = 0;
-    let mut v1: U64 = 0;
     let mut p: *const BYTE = (*state).mem64.as_ptr() as *const BYTE;
     let bEnd: *const BYTE =
         ((*state).mem64.as_ptr() as

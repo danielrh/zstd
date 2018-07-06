@@ -4,9 +4,9 @@ non_upper_case_globals , unused_mut )]
 #![feature ( extern_types , libc , offset_to )]
 extern crate libc;
 extern "C" {
-    pub type ZSTD_CCtx_s;
     pub type POOL_ctx_s;
     pub type _IO_FILE_plus;
+    pub type ZSTD_CCtx_s;
     pub type ZSTD_CDict_s;
     #[no_mangle]
     static mut _IO_2_1_stdin_: _IO_FILE_plus;
@@ -66,24 +66,29 @@ extern "C" {
                                 dstCapacity: size_t, src: *const libc::c_void,
                                 srcSize: size_t, cdict: *const ZSTD_CDict)
      -> size_t;
-    /* **************************************
-*  Explicit context
-***************************************/
-    /* !< maximum compression level available */
-    /* !< provides readable string from an error code */
-    /* *********************************
- *  Bulk processing dictionary API
- *********************************/
-    /* ! Constructor and Destructor of FSE_CTable.
-    Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
-    /* ! POOL_function :
- *  The function type that can be added to a thread pool.
+    /* *
+ * Parameters for COVER_tryParameters().
  */
     /* ! Custom memory allocation :
  *  These prototypes make it possible to pass your own allocation/free functions.
  *  ZSTD_customMem is provided at creation time, using ZSTD_create*_advanced() variants listed below.
  *  All allocation/free operations will be completed using these custom variants instead of regular <stdlib.h> ones.
  */
+    /* ! POOL_function :
+ *  The function type that can be added to a thread pool.
+ */
+    /* **************************************
+*  Explicit context
+***************************************/
+    /* !< maximum compression level available */
+    /* !< provides readable string from an error code */
+    /* ! Constructor and Destructor of FSE_CTable.
+    Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
+    /* *********************************
+ *  Bulk processing dictionary API
+ *********************************/
+    /* ! Constructor and Destructor of FSE_DTable.
+    Note that its size depends on 'tableLog' */
     /* *
  * COVER_best_t is used for two purposes:
  * 1. Synchronizing threads.
@@ -91,11 +96,6 @@ extern "C" {
  *
  * All of the methods except COVER_best_init() are thread safe if zstd is
  * compiled with multithreaded support.
- */
-    /* ! Constructor and Destructor of FSE_DTable.
-    Note that its size depends on 'tableLog' */
-    /* *
- * Parameters for COVER_tryParameters().
  */
     /* ***************************************************************************************
  * START OF ADVANCED AND EXPERIMENTAL FUNCTIONS
@@ -172,15 +172,227 @@ extern "C" {
 }
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct BIT_CStream_t {
+pub struct _IO_marker {
+    pub _next: *mut _IO_marker,
+    pub _sbuf: *mut _IO_FILE,
+    pub _pos: libc::c_int,
+}
+pub type U32 = uint32_t;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct COVER_map_pair_t_s {
+    pub key: U32,
+    pub value: U32,
+}
+pub type __compar_fn_t =
+    Option<unsafe extern "C" fn(_: *const libc::c_void,
+                                _: *const libc::c_void) -> libc::c_int>;
+pub type COVER_map_pair_t = COVER_map_pair_t_s;
+pub const ZSTD_error_corruption_detected: ERR_enum = 20;
+pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
+pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct BIT_DStream_t {
     pub bitContainer: size_t,
-    pub bitPos: libc::c_uint,
-    pub startPtr: *mut libc::c_char,
-    pub ptr: *mut libc::c_char,
-    pub endPtr: *mut libc::c_char,
+    pub bitsConsumed: libc::c_uint,
+    pub ptr: *const libc::c_char,
+    pub start: *const libc::c_char,
+    pub limitPtr: *const libc::c_char,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_symbolCompressionTransform {
+    pub deltaFindState: libc::c_int,
+    pub deltaNbBits: U32,
 }
 pub type __off64_t = libc::c_long;
-pub const MEM_static_assert: unnamed_0 = 1;
+pub const ZSTD_error_maxCode: ERR_enum = 120;
+pub type ptrdiff_t = libc::c_long;
+pub const ZSTD_error_init_missing: ERR_enum = 62;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union pthread_condattr_t {
+    __size: [libc::c_char; 4],
+    __align: libc::c_int,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZDICT_cover_params_t {
+    pub k: libc::c_uint,
+    pub d: libc::c_uint,
+    pub steps: libc::c_uint,
+    pub nbThreads: libc::c_uint,
+    pub zParams: ZDICT_params_t,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union pthread_mutex_t {
+    __data: __pthread_mutex_s,
+    __size: [libc::c_char; 40],
+    __align: libc::c_long,
+}
+pub const ZSTD_error_stage_wrong: ERR_enum = 60;
+pub type size_t = libc::c_ulong;
+pub const MEM_static_assert: unnamed_1 = 1;
+pub type clock_t = __clock_t;
+pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+pub type COVER_tryParameters_data_t = COVER_tryParameters_data_s;
+pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct COVER_segment_t {
+    pub begin: U32,
+    pub end: U32,
+    pub score: U32,
+}
+pub type ZSTD_allocFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
+               -> *mut libc::c_void>;
+pub const ZSTD_error_seekableIO: ERR_enum = 102;
+pub const ZSTD_error_memory_allocation: ERR_enum = 64;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DTableHeader {
+    pub tableLog: U16,
+    pub fastMode: U16,
+}
+pub type unnamed = libc::c_uint;
+pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
+pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_decode_t {
+    pub newState: libc::c_ushort,
+    pub symbol: libc::c_uchar,
+    pub nbBits: libc::c_uchar,
+}
+pub type __clock_t = libc::c_long;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_CState_t {
+    pub value: ptrdiff_t,
+    pub stateTable: *const libc::c_void,
+    pub symbolTT: *const libc::c_void,
+    pub stateLog: libc::c_uint,
+}
+pub type POOL_function =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union pthread_cond_t {
+    __data: unnamed_2,
+    __size: [libc::c_char; 48],
+    __align: libc::c_longlong,
+}
+pub type ZSTD_CCtx = ZSTD_CCtx_s;
+pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
+pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
+pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
+pub type S16 = int16_t;
+pub type BYTE = uint8_t;
+pub type ERR_enum = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct COVER_map_s {
+    pub data: *mut COVER_map_pair_t,
+    pub sizeLog: U32,
+    pub size: U32,
+    pub sizeMask: U32,
+}
+pub const MEM_static_assert_0: unnamed = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union unnamed_0 {
+    u: U32,
+    c: [BYTE; 4],
+}
+pub type __off_t = libc::c_long;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct __pthread_internal_list {
+    pub __prev: *mut __pthread_internal_list,
+    pub __next: *mut __pthread_internal_list,
+}
+pub type FSE_CTable = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct __pthread_mutex_s {
+    pub __lock: libc::c_int,
+    pub __count: libc::c_uint,
+    pub __owner: libc::c_int,
+    pub __nusers: libc::c_uint,
+    pub __kind: libc::c_int,
+    pub __spins: libc::c_short,
+    pub __elision: libc::c_short,
+    pub __list: __pthread_list_t,
+}
+pub const ZSTD_error_version_unsupported: ERR_enum = 12;
+pub type COVER_map_t = COVER_map_s;
+pub const ZSTD_error_GENERIC: ERR_enum = 1;
+pub type _IO_lock_t = ();
+pub type BIT_DStream_status = libc::c_uint;
+pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
+pub const BIT_DStream_completed: BIT_DStream_status = 2;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign64 {
+    pub v: U64,
+}
+pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
+pub type uint32_t = libc::c_uint;
+pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
+pub type U16 = uint16_t;
+pub type unnamed_1 = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct COVER_tryParameters_data_s {
+    pub ctx: *const COVER_ctx_t,
+    pub best: *mut COVER_best_t,
+    pub dictBufferCapacity: size_t,
+    pub parameters: ZDICT_cover_params_t,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct unnamed_2 {
+    pub __lock: libc::c_int,
+    pub __futex: libc::c_uint,
+    pub __total_seq: libc::c_ulonglong,
+    pub __wakeup_seq: libc::c_ulonglong,
+    pub __woken_seq: libc::c_ulonglong,
+    pub __mutex: *mut libc::c_void,
+    pub __nwaiters: libc::c_uint,
+    pub __broadcast_seq: libc::c_uint,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DState_t {
+    pub state: size_t,
+    pub table: *const libc::c_void,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub type U64 = uint64_t;
+pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_customMem {
+    pub customAlloc: ZSTD_allocFunction,
+    pub customFree: ZSTD_freeFunction,
+    pub opaque: *mut libc::c_void,
+}
+pub type ZSTD_CDict = ZSTD_CDict_s;
+pub type __pthread_list_t = __pthread_internal_list;
+pub type uint16_t = libc::c_ushort;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZDICT_params_t {
@@ -188,15 +400,13 @@ pub struct ZDICT_params_t {
     pub notificationLevel: libc::c_uint,
     pub dictID: libc::c_uint,
 }
-pub type __off_t = libc::c_long;
-pub const ZSTD_error_prefix_unknown: ZSTD_ErrorCode = 10;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct _IO_marker {
-    pub _next: *mut _IO_marker,
-    pub _sbuf: *mut _IO_FILE,
-    pub _pos: libc::c_int,
-}
+pub type int16_t = libc::c_short;
+pub const BIT_DStream_overflow: BIT_DStream_status = 3;
+pub type FSE_DTable = libc::c_uint;
+pub const ZSTD_error_no_error: ERR_enum = 0;
+pub type COVER_best_t = COVER_best_s;
+pub type ZSTD_ErrorCode = ERR_enum;
+pub type uint8_t = libc::c_uchar;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct _IO_FILE {
@@ -230,248 +440,9 @@ pub struct _IO_FILE {
     pub _mode: libc::c_int,
     pub _unused2: [libc::c_char; 20],
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct __pthread_internal_list {
-    pub __prev: *mut __pthread_internal_list,
-    pub __next: *mut __pthread_internal_list,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union pthread_cond_t {
-    __data: unnamed_1,
-    __size: [libc::c_char; 48],
-    __align: libc::c_longlong,
-}
-pub const BIT_DStream_completed: BIT_DStream_status = 2;
-pub const ZSTD_error_init_missing: ZSTD_ErrorCode = 62;
-pub type ZSTD_CCtx = ZSTD_CCtx_s;
-pub const ZSTD_error_maxCode: ZSTD_ErrorCode = 120;
-pub type FILE = _IO_FILE;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DTableHeader {
-    pub tableLog: U16,
-    pub fastMode: U16,
-}
-pub const BIT_DStream_overflow: BIT_DStream_status = 3;
-pub const ZSTD_error_seekableIO: ZSTD_ErrorCode = 102;
-pub type COVER_map_t = COVER_map_s;
-pub const ZSTD_error_no_error: ZSTD_ErrorCode = 0;
-pub type U64 = uint64_t;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union pthread_mutex_t {
-    __data: __pthread_mutex_s,
-    __size: [libc::c_char; 40],
-    __align: libc::c_long,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct BIT_DStream_t {
-    pub bitContainer: size_t,
-    pub bitsConsumed: libc::c_uint,
-    pub ptr: *const libc::c_char,
-    pub start: *const libc::c_char,
-    pub limitPtr: *const libc::c_char,
-}
-pub type uint8_t = libc::c_uchar;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DState_t {
-    pub state: size_t,
-    pub table: *const libc::c_void,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct COVER_map_s {
-    pub data: *mut COVER_map_pair_t,
-    pub sizeLog: U32,
-    pub size: U32,
-    pub sizeMask: U32,
-}
-pub const ZSTD_error_dictionaryCreation_failed: ZSTD_ErrorCode = 34;
-pub type __pthread_list_t = __pthread_internal_list;
+pub type uint64_t = libc::c_ulong;
+pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
 pub type POOL_ctx = POOL_ctx_s;
-pub const ZSTD_error_dictionary_corrupted: ZSTD_ErrorCode = 30;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union pthread_mutexattr_t {
-    __size: [libc::c_char; 4],
-    __align: libc::c_int,
-}
-pub const ZSTD_error_checksum_wrong: ZSTD_ErrorCode = 22;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_CState_t {
-    pub value: ptrdiff_t,
-    pub stateTable: *const libc::c_void,
-    pub symbolTT: *const libc::c_void,
-    pub stateLog: libc::c_uint,
-}
-pub const ZSTD_error_parameter_outOfBound: ZSTD_ErrorCode = 42;
-pub type unnamed = libc::c_uint;
-pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
-pub type ZSTD_CDict = ZSTD_CDict_s;
-pub const ZSTD_error_stage_wrong: ZSTD_ErrorCode = 60;
-pub type size_t = libc::c_ulong;
-pub const ZSTD_error_dstSize_tooSmall: ZSTD_ErrorCode = 70;
-pub const ZSTD_error_frameParameter_unsupported: ZSTD_ErrorCode = 14;
-pub type ptrdiff_t = libc::c_long;
-pub type __clock_t = libc::c_long;
-pub const ZSTD_error_frameParameter_windowTooLarge: ZSTD_ErrorCode = 16;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-pub type BIT_DStream_status = libc::c_uint;
-pub type unnamed_0 = libc::c_uint;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_symbolCompressionTransform {
-    pub deltaFindState: libc::c_int,
-    pub deltaNbBits: U32,
-}
-pub type ZSTD_ErrorCode = libc::c_uint;
-pub const ZSTD_error_tableLog_tooLarge: ZSTD_ErrorCode = 44;
-pub type U32 = uint32_t;
-pub const ZSTD_error_srcSize_wrong: ZSTD_ErrorCode = 72;
-pub type ERR_enum = ZSTD_ErrorCode;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct COVER_segment_t {
-    pub begin: U32,
-    pub end: U32,
-    pub score: U32,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZDICT_cover_params_t {
-    pub k: libc::c_uint,
-    pub d: libc::c_uint,
-    pub steps: libc::c_uint,
-    pub nbThreads: libc::c_uint,
-    pub zParams: ZDICT_params_t,
-}
-pub type FSE_CTable = libc::c_uint;
-pub const ZSTD_error_maxSymbolValue_tooSmall: ZSTD_ErrorCode = 48;
-pub type int16_t = libc::c_short;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct COVER_tryParameters_data_s {
-    pub ctx: *const COVER_ctx_t,
-    pub best: *mut COVER_best_t,
-    pub dictBufferCapacity: size_t,
-    pub parameters: ZDICT_cover_params_t,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_decode_t {
-    pub newState: libc::c_ushort,
-    pub symbol: libc::c_uchar,
-    pub nbBits: libc::c_uchar,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_customMem {
-    pub customAlloc: ZSTD_allocFunction,
-    pub customFree: ZSTD_freeFunction,
-    pub opaque: *mut libc::c_void,
-}
-pub const ZSTD_error_workSpace_tooSmall: ZSTD_ErrorCode = 66;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub const ZSTD_error_maxSymbolValue_tooLarge: ZSTD_ErrorCode = 46;
-pub const ZSTD_error_dictionary_wrong: ZSTD_ErrorCode = 32;
-pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
-pub type POOL_function =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>;
-pub const ZSTD_error_parameter_unsupported: ZSTD_ErrorCode = 40;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
-}
-pub const MEM_static_assert_0: unnamed = 1;
-pub const ZSTD_error_version_unsupported: ZSTD_ErrorCode = 12;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct unnamed_1 {
-    pub __lock: libc::c_int,
-    pub __futex: libc::c_uint,
-    pub __total_seq: libc::c_ulonglong,
-    pub __wakeup_seq: libc::c_ulonglong,
-    pub __woken_seq: libc::c_ulonglong,
-    pub __mutex: *mut libc::c_void,
-    pub __nwaiters: libc::c_uint,
-    pub __broadcast_seq: libc::c_uint,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct __pthread_mutex_s {
-    pub __lock: libc::c_int,
-    pub __count: libc::c_uint,
-    pub __owner: libc::c_int,
-    pub __nusers: libc::c_uint,
-    pub __kind: libc::c_int,
-    pub __spins: libc::c_short,
-    pub __elision: libc::c_short,
-    pub __list: __pthread_list_t,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-pub type uint32_t = libc::c_uint;
-pub const ZSTD_error_frameIndex_tooLarge: ZSTD_ErrorCode = 100;
-pub type BYTE = uint8_t;
-pub type _IO_lock_t = ();
-pub type uint16_t = libc::c_ushort;
-pub type ZSTD_allocFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
-               -> *mut libc::c_void>;
-pub const ZSTD_error_memory_allocation: ZSTD_ErrorCode = 64;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct COVER_best_s {
-    pub mutex: pthread_mutex_t,
-    pub cond: pthread_cond_t,
-    pub liveJobs: size_t,
-    pub dict: *mut libc::c_void,
-    pub dictSize: size_t,
-    pub parameters: ZDICT_cover_params_t,
-    pub compressedSize: size_t,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union pthread_condattr_t {
-    __size: [libc::c_char; 4],
-    __align: libc::c_int,
-}
-pub const ZSTD_error_GENERIC: ZSTD_ErrorCode = 1;
-pub type U16 = uint16_t;
-pub type COVER_best_t = COVER_best_s;
-pub type S16 = int16_t;
-pub type __compar_fn_t =
-    Option<unsafe extern "C" fn(_: *const libc::c_void,
-                                _: *const libc::c_void) -> libc::c_int>;
-pub type ZSTD_freeFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
-               -> ()>;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union unnamed_2 {
-    u: U32,
-    c: [BYTE; 4],
-}
-pub type FSE_DTable = libc::c_uint;
-pub type clock_t = __clock_t;
-pub type COVER_map_pair_t = COVER_map_pair_t_s;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct COVER_ctx_t {
@@ -485,15 +456,44 @@ pub struct COVER_ctx_t {
     pub dmerAt: *mut U32,
     pub d: libc::c_uint,
 }
-pub type COVER_tryParameters_data_t = COVER_tryParameters_data_s;
-pub const ZSTD_error_corruption_detected: ZSTD_ErrorCode = 20;
-pub type uint64_t = libc::c_ulong;
+pub type FILE = _IO_FILE;
+pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
+pub type ZSTD_freeFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
+               -> ()>;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct COVER_map_pair_t_s {
-    pub key: U32,
-    pub value: U32,
+pub struct BIT_CStream_t {
+    pub bitContainer: size_t,
+    pub bitPos: libc::c_uint,
+    pub startPtr: *mut libc::c_char,
+    pub ptr: *mut libc::c_char,
+    pub endPtr: *mut libc::c_char,
 }
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct COVER_best_s {
+    pub mutex: pthread_mutex_t,
+    pub cond: pthread_cond_t,
+    pub liveJobs: size_t,
+    pub dict: *mut libc::c_void,
+    pub dictSize: size_t,
+    pub parameters: ZDICT_cover_params_t,
+    pub compressedSize: size_t,
+}
+pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union pthread_mutexattr_t {
+    __size: [libc::c_char; 4],
+    __align: libc::c_int,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalignArch {
+    pub v: size_t,
+}
+pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -504,7 +504,7 @@ unsafe extern "C" fn MEM_64bits() -> libc::c_uint {
                 8i32 as libc::c_ulong) as libc::c_int as libc::c_uint;
 }
 unsafe extern "C" fn MEM_isLittleEndian() -> libc::c_uint {
-    let one: unnamed_2 = unnamed_2{u: 1i32 as U32,};
+    let one: unnamed_0 = unnamed_0{u: 1i32 as U32,};
     return one.c[0usize] as libc::c_uint;
 }
 unsafe extern "C" fn MEM_read16(mut ptr: *const libc::c_void) -> U16 {
@@ -2175,7 +2175,7 @@ pub unsafe extern "C" fn ZDICT_optimizeTrainFromBuffer_cover(mut dictBuffer:
                                                                                                    *mut __pthread_internal_list,},},},
                      cond:
                          pthread_cond_t{__data:
-                                            unnamed_1{__lock: 0,
+                                            unnamed_2{__lock: 0,
                                                       __futex: 0,
                                                       __total_seq: 0,
                                                       __wakeup_seq: 0,

@@ -213,47 +213,131 @@ extern "C" {
                                        dictFileName: *const libc::c_char)
      -> libc::c_int;
 }
-pub const _SC_2_PBS: unnamed_0 = 168;
-pub type __blksize_t = libc::c_long;
-pub const _SC_RE_DUP_MAX: unnamed_0 = 44;
-pub const _SC_SEMAPHORES: unnamed_0 = 21;
-pub const _SC_2_C_DEV: unnamed_0 = 48;
-pub const _SC_V7_LPBIG_OFFBIG: unnamed_0 = 240;
-pub const _SC_XOPEN_SHM: unnamed_0 = 94;
-pub const _SC_THREAD_SAFE_FUNCTIONS: unnamed_0 = 68;
-pub type __uid_t = libc::c_uint;
-pub const _SC_READER_WRITER_LOCKS: unnamed_0 = 153;
-pub const _SC_INT_MAX: unnamed_0 = 104;
-pub const _SC_V7_ILP32_OFFBIG: unnamed_0 = 238;
-pub const _SC_LEVEL3_CACHE_ASSOC: unnamed_0 = 195;
-pub const _SC_TYPED_MEMORY_OBJECTS: unnamed_0 = 165;
+pub const _SC_PII_OSI_COTS: unnamed_1 = 63;
+pub const _SC_LEVEL1_ICACHE_LINESIZE: unnamed_1 = 187;
+pub const _SC_2_PBS_MESSAGE: unnamed_1 = 171;
+pub const ZSTD_dfast: ZSTD_strategy = 2;
+pub const _SC_XBS5_ILP32_OFF32: unnamed_1 = 125;
+pub const zom_test: zstd_operation_mode = 2;
+pub const _SC_TZNAME_MAX: unnamed_1 = 6;
+pub const _SC_IOV_MAX: unnamed_1 = 60;
+pub type __gid_t = libc::c_uint;
+pub const _SC_TRACE_SYS_MAX: unnamed_1 = 244;
+pub const _SC_NL_NMAX: unnamed_1 = 122;
+pub type ptrdiff_t = libc::c_long;
+pub const _SC_PASS_MAX: unnamed_1 = 88;
+pub const _SC_XBS5_LPBIG_OFFBIG: unnamed_1 = 128;
+pub const _SC_LINE_MAX: unnamed_1 = 43;
+pub const _SC_XOPEN_VERSION: unnamed_1 = 89;
+pub const _SC_XOPEN_XPG2: unnamed_1 = 98;
+pub const _SC_MQ_PRIO_MAX: unnamed_1 = 28;
+pub const _SC_V6_ILP32_OFFBIG: unnamed_1 = 177;
+pub const _SC_TRACE_INHERIT: unnamed_1 = 183;
+pub const _SC_SIGQUEUE_MAX: unnamed_1 = 34;
+pub const _SC_XOPEN_SHM: unnamed_1 = 94;
+pub const _SC_LEVEL1_DCACHE_ASSOC: unnamed_1 = 189;
+pub const _SC_LEVEL1_DCACHE_SIZE: unnamed_1 = 188;
+pub const FIO_lzmaCompression: FIO_compressionType_t = 3;
+pub const _SC_ULONG_MAX: unnamed_1 = 117;
+pub const _SC_XOPEN_CRYPT: unnamed_1 = 92;
+pub const _SC_LOGIN_NAME_MAX: unnamed_1 = 71;
+pub const _SC_FILE_SYSTEM: unnamed_1 = 148;
+pub const _SC_CLOCK_SELECTION: unnamed_1 = 137;
+pub const ZSTD_btlazy2: ZSTD_strategy = 6;
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
+pub struct unalignArch {
+    pub v: size_t,
 }
-pub const _SC_MONOTONIC_CLOCK: unnamed_0 = 149;
-pub const _SC_GETGR_R_SIZE_MAX: unnamed_0 = 69;
-pub const _SC_THREAD_DESTRUCTOR_ITERATIONS: unnamed_0 = 73;
-pub const _SC_NPROCESSORS_CONF: unnamed_0 = 83;
+pub const _SC_STREAM_MAX: unnamed_1 = 5;
+pub const _SC_CHAR_MAX: unnamed_1 = 102;
 pub type time_t = __time_t;
-pub const _SC_POLL: unnamed_0 = 58;
-pub type unnamed = libc::c_uint;
-pub const _SC_THREAD_THREADS_MAX: unnamed_0 = 76;
-pub const _SC_SYSTEM_DATABASE_R: unnamed_0 = 163;
-pub const _SC_PII_XTI: unnamed_0 = 54;
-pub const _SC_USER_GROUPS_R: unnamed_0 = 167;
-pub const _SC_SELECT: unnamed_0 = 59;
-pub const _SC_SPAWN: unnamed_0 = 159;
+pub const _SC_TRACE: unnamed_1 = 181;
+pub const _SC_LONG_BIT: unnamed_1 = 106;
+pub const _SC_C_LANG_SUPPORT_R: unnamed_1 = 136;
+pub const _SC_THREAD_SAFE_FUNCTIONS: unnamed_1 = 68;
+pub const _SC_PII_INTERNET_DGRAM: unnamed_1 = 62;
+pub type __off64_t = libc::c_long;
+pub type U32 = uint32_t;
+pub const _SC_AIO_PRIO_DELTA_MAX: unnamed_1 = 25;
+pub const _SC_TRACE_EVENT_NAME_MAX: unnamed_1 = 242;
+pub const _SC_TIMER_MAX: unnamed_1 = 35;
+pub const _SC_BASE: unnamed_1 = 134;
+pub type __mode_t = libc::c_uint;
+pub const _SC_CHAR_BIT: unnamed_1 = 101;
+pub type ZSTD_strategy = libc::c_uint;
+pub const _SC_TYPED_MEMORY_OBJECTS: unnamed_1 = 165;
+pub const _SC_SHELL: unnamed_1 = 157;
+pub const _SC_MESSAGE_PASSING: unnamed_1 = 20;
+pub const ZSTD_btultra: ZSTD_strategy = 8;
+pub const ZSTD_btopt: ZSTD_strategy = 7;
+pub const _SC_2_C_DEV: unnamed_1 = 48;
+pub const _SC_V6_LP64_OFF64: unnamed_1 = 178;
+pub const _SC_LEVEL1_ICACHE_ASSOC: unnamed_1 = 186;
+pub const _SC_PII_OSI_CLTS: unnamed_1 = 64;
+pub const _SC_FIFO: unnamed_1 = 144;
+pub const _SC_NZERO: unnamed_1 = 109;
+pub const _SC_XOPEN_ENH_I18N: unnamed_1 = 93;
+pub const _SC_V6_ILP32_OFF32: unnamed_1 = 176;
+pub const _SC_WORD_BIT: unnamed_1 = 107;
+pub const _SC_EQUIV_CLASS_MAX: unnamed_1 = 41;
+pub const _SC_PII: unnamed_1 = 53;
+pub type __syscall_slong_t = libc::c_long;
+pub const _SC_REALTIME_SIGNALS: unnamed_1 = 9;
+pub const _SC_SYSTEM_DATABASE: unnamed_1 = 162;
+pub const _SC_SEM_NSEMS_MAX: unnamed_1 = 32;
+pub const _SC_XOPEN_REALTIME: unnamed_1 = 130;
+pub const _SC_THREAD_DESTRUCTOR_ITERATIONS: unnamed_1 = 73;
+pub const _SC_FILE_ATTRIBUTES: unnamed_1 = 146;
+pub const _SC_SAVED_IDS: unnamed_1 = 8;
+pub type FILE = _IO_FILE;
+pub const _SC_THREAD_KEYS_MAX: unnamed_1 = 74;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct _IO_marker {
-    pub _next: *mut _IO_marker,
-    pub _sbuf: *mut _IO_FILE,
-    pub _pos: libc::c_int,
+pub struct stat {
+    pub st_dev: __dev_t,
+    pub st_ino: __ino_t,
+    pub st_nlink: __nlink_t,
+    pub st_mode: __mode_t,
+    pub st_uid: __uid_t,
+    pub st_gid: __gid_t,
+    pub __pad0: libc::c_int,
+    pub st_rdev: __dev_t,
+    pub st_size: __off_t,
+    pub st_blksize: __blksize_t,
+    pub st_blocks: __blkcnt_t,
+    pub st_atime: __time_t,
+    pub st_atimensec: __syscall_ulong_t,
+    pub st_mtime: __time_t,
+    pub st_mtimensec: __syscall_ulong_t,
+    pub st_ctime: __time_t,
+    pub st_ctimensec: __syscall_ulong_t,
+    pub __glibc_reserved: [__syscall_slong_t; 3],
 }
-pub type BYTE = uint8_t;
-pub const _SC_SHRT_MIN: unnamed_0 = 114;
+pub const _SC_XBS5_LP64_OFF64: unnamed_1 = 127;
+pub const _SC_LEVEL3_CACHE_ASSOC: unnamed_1 = 195;
+pub const _SC_V7_ILP32_OFF32: unnamed_1 = 237;
+pub const _SC_MONOTONIC_CLOCK: unnamed_1 = 149;
+pub const _SC_USER_GROUPS: unnamed_1 = 166;
+pub const _SC_LEVEL3_CACHE_LINESIZE: unnamed_1 = 196;
+pub const _SC_NPROCESSORS_ONLN: unnamed_1 = 84;
+pub const _SC_THREAD_PRIORITY_SCHEDULING: unnamed_1 = 79;
+pub const _SC_PAGESIZE: unnamed_1 = 30;
+pub const _SC_SELECT: unnamed_1 = 59;
+pub const _SC_SYNCHRONIZED_IO: unnamed_1 = 14;
+pub const _SC_LEVEL1_DCACHE_LINESIZE: unnamed_1 = 190;
+pub type size_t = libc::c_ulong;
+pub const _SC_SPAWN: unnamed_1 = 159;
+pub const _SC_PII_INTERNET: unnamed_1 = 56;
+pub const _SC_XOPEN_STREAMS: unnamed_1 = 246;
+pub const _SC_2_PBS_ACCOUNTING: unnamed_1 = 169;
+pub const _SC_DEVICE_IO: unnamed_1 = 140;
+pub const _SC_TRACE_USER_EVENT_MAX: unnamed_1 = 245;
+pub const _SC_THREAD_STACK_MIN: unnamed_1 = 75;
+pub type __blkcnt_t = libc::c_long;
+pub const _SC_PII_OSI: unnamed_1 = 57;
+pub const _SC_PII_SOCKET: unnamed_1 = 55;
+pub const _SC_LEVEL2_CACHE_ASSOC: unnamed_1 = 192;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct _IO_FILE {
@@ -287,78 +371,213 @@ pub struct _IO_FILE {
     pub _mode: libc::c_int,
     pub _unused2: [libc::c_char; 20],
 }
-pub const _SC_LEVEL2_CACHE_SIZE: unnamed_0 = 191;
-pub const ZSTD_btultra: ZSTD_strategy = 8;
-pub type U16 = uint16_t;
-pub const _SC_TRACE: unnamed_0 = 181;
-pub const zom_decompress: zstd_operation_mode = 1;
-pub const _SC_SYMLOOP_MAX: unnamed_0 = 173;
-pub const ZSTD_dfast: ZSTD_strategy = 2;
-pub type DIR = __dirstream;
 pub type clockid_t = __clockid_t;
+pub const _SC_TRACE_NAME_MAX: unnamed_1 = 243;
+pub const _SC_SPORADIC_SERVER: unnamed_1 = 160;
+pub const _SC_2_LOCALEDEF: unnamed_1 = 52;
+pub const zom_compress: zstd_operation_mode = 0;
+pub const _SC_THREAD_CPUTIME: unnamed_1 = 139;
+pub const _SC_V6_LPBIG_OFFBIG: unnamed_1 = 179;
+pub const _SC_CLK_TCK: unnamed_1 = 2;
+pub const _SC_PII_OSI_M: unnamed_1 = 65;
+pub const _SC_NGROUPS_MAX: unnamed_1 = 3;
+pub const _SC_AIO_MAX: unnamed_1 = 24;
+pub const _SC_MEMLOCK: unnamed_1 = 17;
+pub const _SC_SYSTEM_DATABASE_R: unnamed_1 = 163;
+pub const _SC_LEVEL4_CACHE_ASSOC: unnamed_1 = 198;
+pub const FIO_lz4Compression: FIO_compressionType_t = 4;
+pub const _SC_TRACE_EVENT_FILTER: unnamed_1 = 182;
+pub type DIR = __dirstream;
+pub const _SC_UCHAR_MAX: unnamed_1 = 115;
+pub const _SC_SHRT_MAX: unnamed_1 = 113;
+pub const _SC_LEVEL2_CACHE_LINESIZE: unnamed_1 = 193;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+pub const _SC_BC_DIM_MAX: unnamed_1 = 37;
+pub const _SC_TIMERS: unnamed_1 = 11;
+pub const _SC_XOPEN_XPG4: unnamed_1 = 100;
+pub type uint32_t = libc::c_uint;
+pub const _SC_NL_TEXTMAX: unnamed_1 = 124;
+pub const _SC_NETWORKING: unnamed_1 = 152;
+pub const ZSTD_greedy: ZSTD_strategy = 3;
+pub type uint64_t = libc::c_ulong;
+pub const _SC_NPROCESSORS_CONF: unnamed_1 = 83;
+pub const _SC_BC_BASE_MAX: unnamed_1 = 36;
+pub const _SC_C_LANG_SUPPORT: unnamed_1 = 135;
+pub type __clockid_t = libc::c_int;
+pub const _SC_READER_WRITER_LOCKS: unnamed_1 = 153;
+pub const _SC_PRIORITIZED_IO: unnamed_1 = 13;
+pub const _SC_2_C_BIND: unnamed_1 = 47;
+pub type ZSTD_freeFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
+               -> ()>;
+pub const _SC_DEVICE_SPECIFIC_R: unnamed_1 = 142;
+pub const _SC_2_PBS: unnamed_1 = 168;
+pub const _SC_BC_STRING_MAX: unnamed_1 = 39;
+pub const _SC_SCHAR_MIN: unnamed_1 = 112;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct _IO_marker {
+    pub _next: *mut _IO_marker,
+    pub _sbuf: *mut _IO_FILE,
+    pub _pos: libc::c_int,
+}
+pub const _SC_ADVISORY_INFO: unnamed_1 = 132;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub const _SC_AIO_LISTIO_MAX: unnamed_1 = 23;
+pub const _SC_MULTI_PROCESS: unnamed_1 = 150;
+pub const ZSTD_fast: ZSTD_strategy = 1;
+pub const zom_bench: zstd_operation_mode = 3;
 pub const FIO_zstdCompression: FIO_compressionType_t = 0;
-pub const _SC_INT_MIN: unnamed_0 = 105;
-pub const _SC_2_PBS_LOCATE: unnamed_0 = 170;
-pub const _SC_2_PBS_TRACK: unnamed_0 = 172;
-pub const _SC_NL_ARGMAX: unnamed_0 = 119;
-pub const _SC_DEVICE_SPECIFIC: unnamed_0 = 141;
+pub const _SC_THREAD_SPORADIC_SERVER: unnamed_1 = 161;
+pub const _SC_THREAD_ROBUST_PRIO_PROTECT: unnamed_1 = 248;
+pub const FIO_xzCompression: FIO_compressionType_t = 2;
+pub const _SC_XOPEN_XCU_VERSION: unnamed_1 = 90;
+pub type __dev_t = libc::c_ulong;
+pub const _SC_SS_REPL_MAX: unnamed_1 = 241;
+pub const _SC_NL_MSGMAX: unnamed_1 = 121;
+pub const _SC_OPEN_MAX: unnamed_1 = 4;
+pub const _SC_V7_ILP32_OFFBIG: unnamed_1 = 238;
+pub type UTIL_time_t = timespec;
+pub const _SC_UINT_MAX: unnamed_1 = 116;
+pub const _SC_SSIZE_MAX: unnamed_1 = 110;
+pub type unnamed = libc::c_uint;
+pub const _SC_RE_DUP_MAX: unnamed_1 = 44;
+pub const _SC_LEVEL4_CACHE_SIZE: unnamed_1 = 197;
+pub const _SC_THREADS: unnamed_1 = 67;
+pub const _SC_PII_INTERNET_STREAM: unnamed_1 = 61;
+pub const _SC_PHYS_PAGES: unnamed_1 = 85;
+pub const _SC_XBS5_ILP32_OFFBIG: unnamed_1 = 126;
+pub const _SC_SHARED_MEMORY_OBJECTS: unnamed_1 = 22;
+pub const _SC_RAW_SOCKETS: unnamed_1 = 236;
+pub const _SC_INT_MAX: unnamed_1 = 104;
+pub type __syscall_ulong_t = libc::c_ulong;
+pub const _SC_LEVEL3_CACHE_SIZE: unnamed_1 = 194;
+pub const _SC_COLL_WEIGHTS_MAX: unnamed_1 = 40;
+pub const _SC_2_PBS_CHECKPOINT: unnamed_1 = 175;
+pub const FIO_gzipCompression: FIO_compressionType_t = 1;
+pub const _SC_CPUTIME: unnamed_1 = 138;
+pub const _SC_REGEXP: unnamed_1 = 155;
+pub const _SC_CHAR_MIN: unnamed_1 = 103;
+pub const zom_train: zstd_operation_mode = 4;
+pub type __blksize_t = libc::c_long;
+pub const _SC_THREAD_PRIO_INHERIT: unnamed_1 = 80;
+pub const _SC_FILE_LOCKING: unnamed_1 = 147;
+pub const _SC_FSYNC: unnamed_1 = 15;
+pub const _SC_MQ_OPEN_MAX: unnamed_1 = 27;
+pub const _SC_MAPPED_FILES: unnamed_1 = 16;
+pub const _SC_2_C_VERSION: unnamed_1 = 96;
+pub const _SC_V7_LPBIG_OFFBIG: unnamed_1 = 240;
+pub const _SC_CHARCLASS_NAME_MAX: unnamed_1 = 45;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_customMem {
+    pub customAlloc: ZSTD_allocFunction,
+    pub customFree: ZSTD_freeFunction,
+    pub opaque: *mut libc::c_void,
+}
+pub const _SC_V7_LP64_OFF64: unnamed_1 = 239;
+pub const _SC_XOPEN_REALTIME_THREADS: unnamed_1 = 131;
+pub const _SC_THREAD_ROBUST_PRIO_INHERIT: unnamed_1 = 247;
+pub const zom_list: zstd_operation_mode = 5;
+pub const _SC_AVPHYS_PAGES: unnamed_1 = 86;
+pub type U16 = uint16_t;
+pub const _SC_SCHAR_MAX: unnamed_1 = 111;
+pub const _SC_PRIORITY_SCHEDULING: unnamed_1 = 10;
+pub const _SC_DEVICE_SPECIFIC: unnamed_1 = 141;
+pub const _SC_XOPEN_LEGACY: unnamed_1 = 129;
+pub const _SC_2_PBS_LOCATE: unnamed_1 = 170;
+pub const _SC_CHILD_MAX: unnamed_1 = 1;
+pub type __off_t = libc::c_long;
+pub const _SC_LEVEL1_ICACHE_SIZE: unnamed_1 = 185;
+pub const _SC_ASYNCHRONOUS_IO: unnamed_1 = 12;
+pub const _SC_SINGLE_PROCESS: unnamed_1 = 151;
+pub const _SC_NL_SETMAX: unnamed_1 = 123;
+pub const _SC_BC_SCALE_MAX: unnamed_1 = 38;
+pub const _SC_2_VERSION: unnamed_1 = 46;
+pub const _SC_MEMLOCK_RANGE: unnamed_1 = 18;
+pub const _SC_JOB_CONTROL: unnamed_1 = 7;
+pub const _SC_NL_ARGMAX: unnamed_1 = 119;
+pub type FIO_compressionType_t = libc::c_uint;
+pub type __time_t = libc::c_long;
+pub const _SC_HOST_NAME_MAX: unnamed_1 = 180;
+pub const _SC_2_FORT_DEV: unnamed_1 = 49;
+pub const _SC_2_SW_DEV: unnamed_1 = 51;
+pub const _SC_USER_GROUPS_R: unnamed_1 = 167;
+pub const _SC_2_PBS_TRACK: unnamed_1 = 172;
+pub const _SC_BARRIERS: unnamed_1 = 133;
+pub const _SC_GETGR_R_SIZE_MAX: unnamed_1 = 69;
+pub const _SC_SEM_VALUE_MAX: unnamed_1 = 33;
+pub const _SC_VERSION: unnamed_1 = 29;
+pub const _SC_ARG_MAX: unnamed_1 = 0;
+pub const _SC_INT_MIN: unnamed_1 = 105;
+pub const _SC_SPIN_LOCKS: unnamed_1 = 154;
+pub const _SC_THREAD_THREADS_MAX: unnamed_1 = 76;
+pub const _SC_THREAD_ATTR_STACKSIZE: unnamed_1 = 78;
+pub const ZSTD_lazy2: ZSTD_strategy = 5;
+pub const ZSTD_lazy: ZSTD_strategy = 4;
+pub const _SC_LEVEL2_CACHE_SIZE: unnamed_1 = 191;
+pub const _SC_LEVEL4_CACHE_LINESIZE: unnamed_1 = 199;
+pub const _SC_PIPE: unnamed_1 = 145;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct timespec {
     pub tv_sec: __time_t,
     pub tv_nsec: __syscall_slong_t,
 }
-pub const _SC_2_UPE: unnamed_0 = 97;
-pub const _SC_FILE_SYSTEM: unnamed_0 = 148;
-pub const _SC_TRACE_EVENT_FILTER: unnamed_0 = 182;
-pub type UTIL_time_t = timespec;
-pub const _SC_C_LANG_SUPPORT_R: unnamed_0 = 136;
-pub const _SC_ULONG_MAX: unnamed_0 = 117;
-pub const _SC_AIO_MAX: unnamed_0 = 24;
-pub const _SC_FIFO: unnamed_0 = 144;
-pub const _SC_BARRIERS: unnamed_0 = 133;
-pub const _SC_LEVEL3_CACHE_SIZE: unnamed_0 = 194;
-pub const _SC_SIGNALS: unnamed_0 = 158;
-pub const _SC_MESSAGE_PASSING: unnamed_0 = 20;
-pub const _SC_AIO_LISTIO_MAX: unnamed_0 = 23;
-pub const ZSTD_lazy: ZSTD_strategy = 4;
-pub const _SC_XOPEN_XPG2: unnamed_0 = 98;
-pub const _SC_PAGESIZE: unnamed_0 = 30;
-pub const _SC_XOPEN_VERSION: unnamed_0 = 89;
-pub const _SC_MEMORY_PROTECTION: unnamed_0 = 19;
-pub const _SC_XBS5_ILP32_OFF32: unnamed_0 = 125;
-pub const _SC_THREAD_ROBUST_PRIO_PROTECT: unnamed_0 = 248;
-pub const _SC_TZNAME_MAX: unnamed_0 = 6;
-pub const _SC_HOST_NAME_MAX: unnamed_0 = 180;
-pub type uint64_t = libc::c_ulong;
+pub type _IO_lock_t = ();
+pub const _SC_T_IOV_MAX: unnamed_1 = 66;
+pub type __nlink_t = libc::c_ulong;
+pub const _SC_2_UPE: unnamed_1 = 97;
+pub const zom_decompress: zstd_operation_mode = 1;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union unnamed_0 {
+    u: U32,
+    c: [BYTE; 4],
+}
+pub const _SC_REGEX_VERSION: unnamed_1 = 156;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct utimbuf {
     pub actime: __time_t,
     pub modtime: __time_t,
 }
-pub const _SC_TRACE_EVENT_NAME_MAX: unnamed_0 = 242;
-pub const _SC_LONG_BIT: unnamed_0 = 106;
-pub const _SC_ARG_MAX: unnamed_0 = 0;
-pub const _SC_AVPHYS_PAGES: unnamed_0 = 86;
-pub const _SC_THREADS: unnamed_0 = 67;
-pub const _SC_PII_SOCKET: unnamed_0 = 55;
-pub const _SC_2_LOCALEDEF: unnamed_0 = 52;
-pub const _SC_BASE: unnamed_0 = 134;
-pub const _SC_SHARED_MEMORY_OBJECTS: unnamed_0 = 22;
-pub const _SC_2_PBS_CHECKPOINT: unnamed_0 = 175;
-pub const _SC_MAPPED_FILES: unnamed_0 = 16;
-pub const _SC_PII_OSI_CLTS: unnamed_0 = 64;
+pub type stat_t = stat;
+pub type BYTE = uint8_t;
+pub const _SC_IPV6: unnamed_1 = 235;
+pub const _SC_ATEXIT_MAX: unnamed_1 = 87;
+pub type uint8_t = libc::c_uchar;
 pub type uint16_t = libc::c_ushort;
-pub const _SC_THREAD_PRIO_INHERIT: unnamed_0 = 80;
-pub const _SC_DEVICE_SPECIFIC_R: unnamed_0 = 142;
-pub const _SC_V6_LP64_OFF64: unnamed_0 = 178;
-pub const _SC_SSIZE_MAX: unnamed_0 = 110;
-pub type __blkcnt_t = libc::c_long;
-pub const FIO_xzCompression: FIO_compressionType_t = 2;
-pub const _SC_XOPEN_ENH_I18N: unnamed_0 = 93;
-pub const _SC_NETWORKING: unnamed_0 = 152;
-pub const _SC_UINT_MAX: unnamed_0 = 116;
+pub const _SC_THREAD_ATTR_STACKADDR: unnamed_1 = 77;
+pub const _SC_TTY_NAME_MAX: unnamed_1 = 72;
+pub const _SC_SHRT_MIN: unnamed_1 = 114;
+pub const _SC_XOPEN_XPG3: unnamed_1 = 99;
+pub type ZSTD_allocFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
+               -> *mut libc::c_void>;
+pub const _SC_MEMORY_PROTECTION: unnamed_1 = 19;
+pub type zstd_operation_mode = libc::c_uint;
+pub const MEM_static_assert: unnamed = 1;
+pub type __ino_t = libc::c_ulong;
+pub const _SC_2_FORT_RUN: unnamed_1 = 50;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign64 {
+    pub v: U64,
+}
+pub const _SC_PII_XTI: unnamed_1 = 54;
+pub type U64 = uint64_t;
+pub const _SC_SYMLOOP_MAX: unnamed_1 = 173;
+pub const _SC_TRACE_LOG: unnamed_1 = 184;
+pub const _SC_TIMEOUTS: unnamed_1 = 164;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_compressionParameters {
@@ -370,158 +589,6 @@ pub struct ZSTD_compressionParameters {
     pub targetLength: libc::c_uint,
     pub strategy: ZSTD_strategy,
 }
-pub type stat_t = stat;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-pub const _SC_IPV6: unnamed_0 = 235;
-pub const _SC_PHYS_PAGES: unnamed_0 = 85;
-pub const zom_test: zstd_operation_mode = 2;
-pub type U32 = uint32_t;
-pub const _SC_VERSION: unnamed_0 = 29;
-pub const _SC_2_FORT_DEV: unnamed_0 = 49;
-pub const _SC_PII: unnamed_0 = 53;
-pub const _SC_NPROCESSORS_ONLN: unnamed_0 = 84;
-pub const _SC_SPIN_LOCKS: unnamed_0 = 154;
-pub const _SC_LEVEL1_DCACHE_LINESIZE: unnamed_0 = 190;
-pub const ZSTD_lazy2: ZSTD_strategy = 5;
-pub const _SC_THREAD_PRIO_PROTECT: unnamed_0 = 81;
-pub const _SC_XOPEN_UNIX: unnamed_0 = 91;
-pub const _SC_RAW_SOCKETS: unnamed_0 = 236;
-pub const zom_compress: zstd_operation_mode = 0;
-pub const _SC_MEMLOCK_RANGE: unnamed_0 = 18;
-pub const _SC_UIO_MAXIOV: unnamed_0 = 60;
-pub const zom_bench: zstd_operation_mode = 3;
-pub const _SC_UCHAR_MAX: unnamed_0 = 115;
-pub const _SC_V6_ILP32_OFFBIG: unnamed_0 = 177;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_customMem {
-    pub customAlloc: ZSTD_allocFunction,
-    pub customFree: ZSTD_freeFunction,
-    pub opaque: *mut libc::c_void,
-}
-pub type __nlink_t = libc::c_ulong;
-pub const _SC_LINE_MAX: unnamed_0 = 43;
-pub const _SC_PII_OSI_COTS: unnamed_0 = 63;
-pub const _SC_NL_LANGMAX: unnamed_0 = 120;
-pub const _SC_PASS_MAX: unnamed_0 = 88;
-pub const _SC_TIMERS: unnamed_0 = 11;
-pub const _SC_TRACE_LOG: unnamed_0 = 184;
-pub type uint32_t = libc::c_uint;
-pub const _SC_SHRT_MAX: unnamed_0 = 113;
-pub const _SC_LEVEL1_DCACHE_SIZE: unnamed_0 = 188;
-pub const _SC_2_PBS_ACCOUNTING: unnamed_0 = 169;
-pub type unnamed_0 = libc::c_uint;
-pub type __syscall_slong_t = libc::c_long;
-pub const _SC_LEVEL3_CACHE_LINESIZE: unnamed_0 = 196;
-pub const _SC_2_SW_DEV: unnamed_0 = 51;
-pub const _SC_AIO_PRIO_DELTA_MAX: unnamed_0 = 25;
-pub const _SC_XOPEN_REALTIME: unnamed_0 = 130;
-pub const _SC_THREAD_CPUTIME: unnamed_0 = 139;
-pub const _SC_PIPE: unnamed_0 = 145;
-pub const _SC_TRACE_NAME_MAX: unnamed_0 = 243;
-pub const _SC_REALTIME_SIGNALS: unnamed_0 = 9;
-pub const _SC_PII_OSI: unnamed_0 = 57;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-pub const _SC_CHAR_BIT: unnamed_0 = 101;
-pub type __time_t = libc::c_long;
-pub const _SC_TIMER_MAX: unnamed_0 = 35;
-pub const _SC_TRACE_INHERIT: unnamed_0 = 183;
-pub const _SC_XOPEN_XPG3: unnamed_0 = 99;
-pub const _SC_NZERO: unnamed_0 = 109;
-pub const _SC_V6_ILP32_OFF32: unnamed_0 = 176;
-pub const ZSTD_btopt: ZSTD_strategy = 7;
-pub const _SC_FILE_ATTRIBUTES: unnamed_0 = 146;
-pub const _SC_LEVEL1_ICACHE_SIZE: unnamed_0 = 185;
-pub const _SC_TRACE_USER_EVENT_MAX: unnamed_0 = 245;
-pub const _SC_PRIORITIZED_IO: unnamed_0 = 13;
-pub const _SC_OPEN_MAX: unnamed_0 = 4;
-pub const _SC_XOPEN_STREAMS: unnamed_0 = 246;
-pub type __ino_t = libc::c_ulong;
-pub const _SC_V7_ILP32_OFF32: unnamed_0 = 237;
-pub type ZSTD_allocFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
-               -> *mut libc::c_void>;
-pub const ZSTD_greedy: ZSTD_strategy = 3;
-pub const _SC_PII_INTERNET_STREAM: unnamed_0 = 61;
-pub const _SC_LEVEL4_CACHE_ASSOC: unnamed_0 = 198;
-pub const _SC_WORD_BIT: unnamed_0 = 107;
-pub const _SC_LEVEL4_CACHE_LINESIZE: unnamed_0 = 199;
-pub const _SC_SEM_VALUE_MAX: unnamed_0 = 33;
-pub const _SC_XOPEN_CRYPT: unnamed_0 = 92;
-pub const _SC_CHAR_MIN: unnamed_0 = 103;
-pub type U64 = uint64_t;
-pub const _SC_RTSIG_MAX: unnamed_0 = 31;
-pub const _SC_BC_DIM_MAX: unnamed_0 = 37;
-pub type __clockid_t = libc::c_int;
-pub const _SC_DELAYTIMER_MAX: unnamed_0 = 26;
-pub type __off64_t = libc::c_long;
-pub const _SC_ASYNCHRONOUS_IO: unnamed_0 = 12;
-pub const _SC_NL_MSGMAX: unnamed_0 = 121;
-pub const _SC_USER_GROUPS: unnamed_0 = 166;
-pub const _SC_THREAD_ROBUST_PRIO_INHERIT: unnamed_0 = 247;
-pub const _SC_BC_STRING_MAX: unnamed_0 = 39;
-pub const _SC_LEVEL4_CACHE_SIZE: unnamed_0 = 197;
-pub type __gid_t = libc::c_uint;
-pub const _SC_TTY_NAME_MAX: unnamed_0 = 72;
-pub const _SC_PII_OSI_M: unnamed_0 = 65;
-pub type __syscall_ulong_t = libc::c_ulong;
-pub const _SC_THREAD_ATTR_STACKSIZE: unnamed_0 = 78;
-pub const _SC_XOPEN_XPG4: unnamed_0 = 100;
-pub const _SC_LEVEL2_CACHE_ASSOC: unnamed_0 = 192;
-pub const _SC_SPORADIC_SERVER: unnamed_0 = 160;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub type __off_t = libc::c_long;
-pub const _SC_SIGQUEUE_MAX: unnamed_0 = 34;
-pub const _SC_GETPW_R_SIZE_MAX: unnamed_0 = 70;
-pub const _SC_XOPEN_LEGACY: unnamed_0 = 129;
-pub type FILE = _IO_FILE;
-pub const _SC_XBS5_LP64_OFF64: unnamed_0 = 127;
-pub const _SC_DEVICE_IO: unnamed_0 = 140;
-pub const _SC_XOPEN_REALTIME_THREADS: unnamed_0 = 131;
-pub const ZSTD_btlazy2: ZSTD_strategy = 6;
-pub const _SC_REGEXP: unnamed_0 = 155;
-pub type size_t = libc::c_ulong;
-pub const _SC_MQ_PRIO_MAX: unnamed_0 = 28;
-pub const _SC_LEVEL2_CACHE_LINESIZE: unnamed_0 = 193;
-pub const _SC_XBS5_ILP32_OFFBIG: unnamed_0 = 126;
-pub const _SC_THREAD_SPORADIC_SERVER: unnamed_0 = 161;
-pub const _SC_BC_SCALE_MAX: unnamed_0 = 38;
-pub const _SC_ADVISORY_INFO: unnamed_0 = 132;
-pub const _SC_2_PBS_MESSAGE: unnamed_0 = 171;
-pub const _SC_THREAD_ATTR_STACKADDR: unnamed_0 = 77;
-pub const _SC_SAVED_IDS: unnamed_0 = 8;
-pub const FIO_gzipCompression: FIO_compressionType_t = 1;
-pub const _SC_LEVEL1_ICACHE_ASSOC: unnamed_0 = 186;
-pub const _SC_NL_TEXTMAX: unnamed_0 = 124;
-pub const _SC_REGEX_VERSION: unnamed_0 = 156;
-pub const _SC_THREAD_STACK_MIN: unnamed_0 = 75;
-pub const _SC_LOGIN_NAME_MAX: unnamed_0 = 71;
-pub const _SC_CLK_TCK: unnamed_0 = 2;
-pub const _SC_EQUIV_CLASS_MAX: unnamed_0 = 41;
-pub const _SC_JOB_CONTROL: unnamed_0 = 7;
-pub const _SC_LEVEL1_DCACHE_ASSOC: unnamed_0 = 189;
-pub const _SC_USHRT_MAX: unnamed_0 = 118;
-pub type FIO_compressionType_t = libc::c_uint;
-pub const _SC_2_VERSION: unnamed_0 = 46;
-pub const _SC_LEVEL1_ICACHE_LINESIZE: unnamed_0 = 187;
-pub const _SC_STREAMS: unnamed_0 = 174;
-pub const _SC_MB_LEN_MAX: unnamed_0 = 108;
-pub const _SC_PII_INTERNET_DGRAM: unnamed_0 = 62;
-pub const _SC_THREAD_PRIORITY_SCHEDULING: unnamed_0 = 79;
-pub const _SC_SYSTEM_DATABASE: unnamed_0 = 162;
-pub const _SC_PII_INTERNET: unnamed_0 = 56;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct dirent {
@@ -531,92 +598,25 @@ pub struct dirent {
     pub d_type: libc::c_uchar,
     pub d_name: [libc::c_char; 256],
 }
-pub const _SC_MEMLOCK: unnamed_0 = 17;
-pub const _SC_C_LANG_SUPPORT: unnamed_0 = 135;
-pub const _SC_XOPEN_XCU_VERSION: unnamed_0 = 90;
-pub const _SC_COLL_WEIGHTS_MAX: unnamed_0 = 40;
-pub const _SC_IOV_MAX: unnamed_0 = 60;
-pub const _SC_SCHAR_MAX: unnamed_0 = 111;
-pub const _SC_SHELL: unnamed_0 = 157;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct stat {
-    pub st_dev: __dev_t,
-    pub st_ino: __ino_t,
-    pub st_nlink: __nlink_t,
-    pub st_mode: __mode_t,
-    pub st_uid: __uid_t,
-    pub st_gid: __gid_t,
-    pub __pad0: libc::c_int,
-    pub st_rdev: __dev_t,
-    pub st_size: __off_t,
-    pub st_blksize: __blksize_t,
-    pub st_blocks: __blkcnt_t,
-    pub st_atime: __time_t,
-    pub st_atimensec: __syscall_ulong_t,
-    pub st_mtime: __time_t,
-    pub st_mtimensec: __syscall_ulong_t,
-    pub st_ctime: __time_t,
-    pub st_ctimensec: __syscall_ulong_t,
-    pub __glibc_reserved: [__syscall_slong_t; 3],
-}
-pub type ptrdiff_t = libc::c_long;
-pub type _IO_lock_t = ();
-pub const _SC_STREAM_MAX: unnamed_0 = 5;
-pub const zom_train: zstd_operation_mode = 4;
-pub type uint8_t = libc::c_uchar;
-pub const _SC_2_C_VERSION: unnamed_0 = 96;
-pub const _SC_THREAD_KEYS_MAX: unnamed_0 = 74;
-pub type zstd_operation_mode = libc::c_uint;
-pub const _SC_SINGLE_PROCESS: unnamed_0 = 151;
-pub const MEM_static_assert: unnamed = 1;
-pub const FIO_lzmaCompression: FIO_compressionType_t = 3;
-pub const _SC_FSYNC: unnamed_0 = 15;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union unnamed_1 {
-    u: U32,
-    c: [BYTE; 4],
-}
-pub const zom_list: zstd_operation_mode = 5;
-pub const _SC_CHILD_MAX: unnamed_0 = 1;
-pub type __mode_t = libc::c_uint;
-pub const FIO_lz4Compression: FIO_compressionType_t = 4;
-pub const _SC_CPUTIME: unnamed_0 = 138;
-pub const _SC_NL_SETMAX: unnamed_0 = 123;
-pub const _SC_EXPR_NEST_MAX: unnamed_0 = 42;
-pub const _SC_PRIORITY_SCHEDULING: unnamed_0 = 10;
-pub const _SC_BC_BASE_MAX: unnamed_0 = 36;
-pub const _SC_TIMEOUTS: unnamed_0 = 164;
-pub const _SC_CHAR_MAX: unnamed_0 = 102;
-pub const ZSTD_fast: ZSTD_strategy = 1;
-pub const _SC_SEM_NSEMS_MAX: unnamed_0 = 32;
-pub const _SC_MULTI_PROCESS: unnamed_0 = 150;
-pub const _SC_2_FORT_RUN: unnamed_0 = 50;
-pub const _SC_CHARCLASS_NAME_MAX: unnamed_0 = 45;
-pub const _SC_NL_NMAX: unnamed_0 = 122;
-pub const _SC_2_CHAR_TERM: unnamed_0 = 95;
-pub type ZSTD_strategy = libc::c_uint;
-pub const _SC_SYNCHRONIZED_IO: unnamed_0 = 14;
-pub const _SC_CLOCK_SELECTION: unnamed_0 = 137;
-pub const _SC_FD_MGMT: unnamed_0 = 143;
-pub const _SC_T_IOV_MAX: unnamed_0 = 66;
-pub const _SC_THREAD_PROCESS_SHARED: unnamed_0 = 82;
-pub const _SC_NGROUPS_MAX: unnamed_0 = 3;
-pub const _SC_SCHAR_MIN: unnamed_0 = 112;
-pub type __dev_t = libc::c_ulong;
-pub type ZSTD_freeFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
-               -> ()>;
-pub const _SC_TRACE_SYS_MAX: unnamed_0 = 244;
-pub const _SC_V6_LPBIG_OFFBIG: unnamed_0 = 179;
-pub const _SC_2_C_BIND: unnamed_0 = 47;
-pub const _SC_SS_REPL_MAX: unnamed_0 = 241;
-pub const _SC_ATEXIT_MAX: unnamed_0 = 87;
-pub const _SC_XBS5_LPBIG_OFFBIG: unnamed_0 = 128;
-pub const _SC_V7_LP64_OFF64: unnamed_0 = 239;
-pub const _SC_FILE_LOCKING: unnamed_0 = 147;
-pub const _SC_MQ_OPEN_MAX: unnamed_0 = 27;
+pub const _SC_THREAD_PROCESS_SHARED: unnamed_1 = 82;
+pub type __uid_t = libc::c_uint;
+pub const _SC_RTSIG_MAX: unnamed_1 = 31;
+pub const _SC_MB_LEN_MAX: unnamed_1 = 108;
+pub const _SC_SEMAPHORES: unnamed_1 = 21;
+pub const _SC_THREAD_PRIO_PROTECT: unnamed_1 = 81;
+pub const _SC_USHRT_MAX: unnamed_1 = 118;
+pub const _SC_2_CHAR_TERM: unnamed_1 = 95;
+pub const _SC_UIO_MAXIOV: unnamed_1 = 60;
+pub const _SC_STREAMS: unnamed_1 = 174;
+pub const _SC_EXPR_NEST_MAX: unnamed_1 = 42;
+pub type unnamed_1 = libc::c_uint;
+pub const _SC_FD_MGMT: unnamed_1 = 143;
+pub const _SC_SIGNALS: unnamed_1 = 158;
+pub const _SC_XOPEN_UNIX: unnamed_1 = 91;
+pub const _SC_POLL: unnamed_1 = 58;
+pub const _SC_NL_LANGMAX: unnamed_1 = 120;
+pub const _SC_GETPW_R_SIZE_MAX: unnamed_1 = 70;
+pub const _SC_DELAYTIMER_MAX: unnamed_1 = 26;
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -627,7 +627,7 @@ unsafe extern "C" fn MEM_64bits() -> libc::c_uint {
                 8i32 as libc::c_ulong) as libc::c_int as libc::c_uint;
 }
 unsafe extern "C" fn MEM_isLittleEndian() -> libc::c_uint {
-    let one: unnamed_1 = unnamed_1{u: 1i32 as U32,};
+    let one: unnamed_0 = unnamed_0{u: 1i32 as U32,};
     return one.c[0usize] as libc::c_uint;
 }
 unsafe extern "C" fn MEM_read16(mut ptr: *const libc::c_void) -> U16 {

@@ -12,19 +12,19 @@ extern "C" {
      -> *mut libc::c_void;
     #[no_mangle]
     fn ERR_getErrorString(code: ERR_enum) -> *const libc::c_char;
-    /* ! Constructor and Destructor of FSE_DTable.
-    Note that its size depends on 'tableLog' */
+    /* *< Cannot use the previous table */
+    /* *< Cannot use the previous table */
+    /* *< Can use the previous table but it must be checked */
     /* ! Constructor and Destructor of FSE_CTable.
     Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
-    /* *< Cannot use the previous table */
+    /* ! Constructor and Destructor of FSE_DTable.
+    Note that its size depends on 'tableLog' */
+    /* *< Can use the previous table but it must be checked. Note : The previous table must have been constructed by HUF_compress{1, 4}X_repeat */
     /* ! Custom memory allocation :
  *  These prototypes make it possible to pass your own allocation/free functions.
  *  ZSTD_customMem is provided at creation time, using ZSTD_create*_advanced() variants listed below.
  *  All allocation/free operations will be completed using these custom variants instead of regular <stdlib.h> ones.
  */
-    /* *< Can use the previous table but it must be checked. Note : The previous table must have been constructed by HUF_compress{1, 4}X_repeat */
-    /* *< Cannot use the previous table */
-    /* *< Can use the previous table but it must be checked */
     /* ***************************************************************************************
  * START OF ADVANCED AND EXPERIMENTAL FUNCTIONS
  * The definitions in this section are considered experimental.
@@ -110,128 +110,10 @@ Check also the states. There might be some symbols left there, if some high prob
                          src: *const libc::c_void, srcSize: size_t)
      -> libc::c_uint;
 }
-pub const zop_dynamic: ZSTD_OptPrice_e = 0;
-pub type S16 = int16_t;
-pub type BIT_DStream_status = libc::c_uint;
-pub type HUF_repeat = libc::c_uint;
-pub type BYTE = uint8_t;
-pub type ZSTD_strategy = libc::c_uint;
 pub const ZSTD_btlazy2: ZSTD_strategy = 6;
-pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DState_t {
-    pub state: size_t,
-    pub table: *const libc::c_void,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_symbolCompressionTransform {
-    pub deltaFindState: libc::c_int,
-    pub deltaNbBits: U32,
-}
-pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
-pub type FSE_DTable = libc::c_uint;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct seqDef_s {
-    pub offset: U32,
-    pub litLength: U16,
-    pub matchLength: U16,
-}
-pub const MEM_static_assert: unnamed_0 = 1;
-pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
-pub type U32 = uint32_t;
-pub type FSE_CTable = libc::c_uint;
-pub type uint64_t = libc::c_ulong;
 pub const BIT_DStream_completed: BIT_DStream_status = 2;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_CState_t {
-    pub value: ptrdiff_t,
-    pub stateTable: *const libc::c_void,
-    pub symbolTT: *const libc::c_void,
-    pub stateLog: libc::c_uint,
-}
-pub type U64 = uint64_t;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct repcodes_s {
-    pub rep: [U32; 3],
-}
-pub type ptrdiff_t = libc::c_long;
-pub const ZSTD_error_init_missing: ERR_enum = 62;
-pub type U16 = uint16_t;
-pub const ZSTD_lazy2: ZSTD_strategy = 5;
-pub const ZSTD_greedy: ZSTD_strategy = 3;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct seqStore_t {
-    pub sequencesStart: *mut seqDef,
-    pub sequences: *mut seqDef,
-    pub litStart: *mut BYTE,
-    pub lit: *mut BYTE,
-    pub llCode: *mut BYTE,
-    pub mlCode: *mut BYTE,
-    pub ofCode: *mut BYTE,
-    pub longLengthID: U32,
-    pub longLengthPos: U32,
-}
-pub const BIT_DStream_overflow: BIT_DStream_status = 3;
-pub type uint16_t = libc::c_ushort;
-pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
-pub const zop_predef: ZSTD_OptPrice_e = 1;
-pub type ZSTD_OptPrice_e = libc::c_uint;
-pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_customMem {
-    pub customAlloc: ZSTD_allocFunction,
-    pub customFree: ZSTD_freeFunction,
-    pub opaque: *mut libc::c_void,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_window_t {
-    pub nextSrc: *const BYTE,
-    pub base: *const BYTE,
-    pub dictBase: *const BYTE,
-    pub dictLimit: U32,
-    pub lowLimit: U32,
-}
-pub type int16_t = libc::c_short;
-pub type ZSTD_dictMode_e = libc::c_uint;
-pub const ZSTD_noDict: ZSTD_dictMode_e = 0;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DTableHeader {
-    pub tableLog: U16,
-    pub fastMode: U16,
-}
+pub const FSE_repeat_none: FSE_repeat = 0;
 pub const ZSTD_error_no_error: ERR_enum = 0;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_decode_t {
-    pub newState: libc::c_ushort,
-    pub symbol: libc::c_uchar,
-    pub nbBits: libc::c_uchar,
-}
-pub const HUF_repeat_check: HUF_repeat = 1;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct optState_t {
@@ -252,17 +134,28 @@ pub struct optState_t {
     pub priceType: ZSTD_OptPrice_e,
     pub symbolCosts: *const ZSTD_entropyCTables_t,
 }
-pub const ZSTD_dictMatchState: ZSTD_dictMode_e = 2;
-pub const ZSTD_error_memory_allocation: ERR_enum = 64;
-pub const ZSTD_dfast: ZSTD_strategy = 2;
-pub const MEM_static_assert_0: unnamed_1 = 1;
-pub type ZSTD_freeFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
-               -> ()>;
-pub const HUF_repeat_none: HUF_repeat = 0;
-pub type ERR_enum = libc::c_uint;
-pub const ZSTD_lazy: ZSTD_strategy = 4;
+pub type int16_t = libc::c_short;
 pub const ZSTD_error_version_unsupported: ERR_enum = 12;
+pub type ERR_enum = libc::c_uint;
+pub type BYTE = uint8_t;
+pub type unnamed = libc::c_uint;
+pub const ZSTD_btultra: ZSTD_strategy = 8;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_decode_t {
+    pub newState: libc::c_ushort,
+    pub symbol: libc::c_uchar,
+    pub nbBits: libc::c_uchar,
+}
+pub const ZSTD_error_init_missing: ERR_enum = 62;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_customMem {
+    pub customAlloc: ZSTD_allocFunction,
+    pub customFree: ZSTD_freeFunction,
+    pub opaque: *mut libc::c_void,
+}
+pub const ZSTD_error_stage_wrong: ERR_enum = 60;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct BIT_CStream_t {
@@ -272,35 +165,48 @@ pub struct BIT_CStream_t {
     pub ptr: *mut libc::c_char,
     pub endPtr: *mut libc::c_char,
 }
-pub const ZSTD_btopt: ZSTD_strategy = 7;
-pub type repcodes_t = repcodes_s;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct ZSTD_hufCTables_t {
-    pub CTable: [U32; 256],
-    pub repeatMode: HUF_repeat,
+pub struct BIT_DStream_t {
+    pub bitContainer: size_t,
+    pub bitsConsumed: libc::c_uint,
+    pub ptr: *const libc::c_char,
+    pub start: *const libc::c_char,
+    pub limitPtr: *const libc::c_char,
 }
-pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
-pub const ZSTD_error_corruption_detected: ERR_enum = 20;
-pub type seqDef = seqDef_s;
-pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
-pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
-pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
+pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
+pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DTableHeader {
+    pub tableLog: U16,
+    pub fastMode: U16,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct repcodes_s {
+    pub rep: [U32; 3],
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_symbolCompressionTransform {
+    pub deltaFindState: libc::c_int,
+    pub deltaNbBits: U32,
+}
+pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
+pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
+pub struct unalign64 {
+    pub v: U64,
 }
-pub type uint32_t = libc::c_uint;
-pub type ZSTD_allocFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
-               -> *mut libc::c_void>;
-pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
-pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
-pub const ZSTD_error_GENERIC: ERR_enum = 1;
-pub const FSE_repeat_none: FSE_repeat = 0;
-pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
-pub const ZSTD_fast: ZSTD_strategy = 1;
+pub const ZSTD_greedy: ZSTD_strategy = 3;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalignArch {
+    pub v: size_t,
+}
+pub const ZSTD_lazy2: ZSTD_strategy = 5;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_fseCTables_t {
@@ -311,76 +217,39 @@ pub struct ZSTD_fseCTables_t {
     pub matchlength_repeatMode: FSE_repeat,
     pub litlength_repeatMode: FSE_repeat,
 }
-pub const HUF_repeat_valid: HUF_repeat = 2;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub union unnamed {
-    u: U32,
-    c: [BYTE; 4],
-}
-pub const ZSTD_error_stage_wrong: ERR_enum = 60;
-pub const ZSTD_error_maxCode: ERR_enum = 120;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct BIT_DStream_t {
-    pub bitContainer: size_t,
-    pub bitsConsumed: libc::c_uint,
-    pub ptr: *const libc::c_char,
-    pub start: *const libc::c_char,
-    pub limitPtr: *const libc::c_char,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_match_t {
-    pub off: U32,
-    pub len: U32,
-}
-pub type FSE_repeat = libc::c_uint;
-pub const ZSTD_error_checksum_wrong: ERR_enum = 22;
-pub type ZSTD_matchState_t = ZSTD_matchState_t_0;
-pub type unnamed_0 = libc::c_uint;
-pub const ZSTD_error_srcSize_wrong: ERR_enum = 72;
-pub const ZSTD_extDict: ZSTD_dictMode_e = 1;
+pub type U16 = uint16_t;
+pub const MEM_static_assert: unnamed_0 = 1;
+pub const HUF_repeat_check: HUF_repeat = 1;
+pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
+pub const FSE_repeat_check: FSE_repeat = 1;
+pub type uint16_t = libc::c_ushort;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_entropyCTables_t {
     pub huf: ZSTD_hufCTables_t,
     pub fse: ZSTD_fseCTables_t,
 }
-pub const FSE_repeat_check: FSE_repeat = 1;
-pub const ZSTD_btultra: ZSTD_strategy = 8;
+pub type ZSTD_dictMode_e = libc::c_uint;
+pub type ZSTD_strategy = libc::c_uint;
 pub type ZSTD_ErrorCode = ERR_enum;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct ZSTD_matchState_t_0 {
-    pub window: ZSTD_window_t,
-    pub loadedDictEnd: U32,
-    pub nextToUpdate: U32,
-    pub nextToUpdate3: U32,
-    pub hashLog3: U32,
-    pub hashTable: *mut U32,
-    pub hashTable3: *mut U32,
-    pub chainTable: *mut U32,
-    pub opt: optState_t,
-    pub dictMatchState: *const ZSTD_matchState_t,
+pub struct seqDef_s {
+    pub offset: U32,
+    pub litLength: U16,
+    pub matchLength: U16,
 }
-pub type uint8_t = libc::c_uchar;
-pub const ZSTD_error_maxSymbolValue_tooLarge: ERR_enum = 46;
-pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
-pub type size_t = libc::c_ulong;
-pub const ZSTD_error_prefix_unknown: ERR_enum = 10;
+pub type S16 = int16_t;
+pub type HUF_repeat = libc::c_uint;
+pub const ZSTD_btopt: ZSTD_strategy = 7;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct ZSTD_optimal_t {
-    pub price: libc::c_int,
-    pub off: U32,
-    pub mlen: U32,
-    pub litlen: U32,
-    pub rep: [U32; 3],
+pub struct ZSTD_hufCTables_t {
+    pub CTable: [U32; 256],
+    pub repeatMode: HUF_repeat,
 }
-pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
-pub type unnamed_1 = libc::c_uint;
-pub const FSE_repeat_valid: FSE_repeat = 2;
+pub const ZSTD_error_corruption_detected: ERR_enum = 20;
+pub type BIT_DStream_status = libc::c_uint;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_compressionParameters {
@@ -393,6 +262,137 @@ pub struct ZSTD_compressionParameters {
     pub strategy: ZSTD_strategy,
 }
 pub const ZSTD_error_seekableIO: ERR_enum = 102;
+pub const ZSTD_error_parameter_outOfBound: ERR_enum = 42;
+pub const FSE_repeat_valid: FSE_repeat = 2;
+pub const ZSTD_error_memory_allocation: ERR_enum = 64;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct seqStore_t {
+    pub sequencesStart: *mut seqDef,
+    pub sequences: *mut seqDef,
+    pub litStart: *mut BYTE,
+    pub lit: *mut BYTE,
+    pub llCode: *mut BYTE,
+    pub mlCode: *mut BYTE,
+    pub ofCode: *mut BYTE,
+    pub longLengthID: U32,
+    pub longLengthPos: U32,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DState_t {
+    pub state: size_t,
+    pub table: *const libc::c_void,
+}
+pub type ZSTD_OptPrice_e = libc::c_uint;
+pub const zop_dynamic: ZSTD_OptPrice_e = 0;
+pub const ZSTD_error_maxCode: ERR_enum = 120;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_CState_t {
+    pub value: ptrdiff_t,
+    pub stateTable: *const libc::c_void,
+    pub symbolTT: *const libc::c_void,
+    pub stateLog: libc::c_uint,
+}
+pub const BIT_DStream_overflow: BIT_DStream_status = 3;
+pub const ZSTD_error_frameParameter_windowTooLarge: ERR_enum = 16;
+pub const ZSTD_error_GENERIC: ERR_enum = 1;
+pub type repcodes_t = repcodes_s;
+pub const ZSTD_error_parameter_unsupported: ERR_enum = 40;
+pub type unnamed_0 = libc::c_uint;
+pub const ZSTD_error_frameParameter_unsupported: ERR_enum = 14;
+pub const ZSTD_dictMatchState: ZSTD_dictMode_e = 2;
+pub const ZSTD_extDict: ZSTD_dictMode_e = 1;
+pub type FSE_CTable = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_matchState_t {
+    pub window: ZSTD_window_t,
+    pub loadedDictEnd: U32,
+    pub nextToUpdate: U32,
+    pub nextToUpdate3: U32,
+    pub hashLog3: U32,
+    pub hashTable: *mut U32,
+    pub hashTable3: *mut U32,
+    pub chainTable: *mut U32,
+    pub opt: optState_t,
+    pub dictMatchState: *const ZSTD_matchState_t_0,
+}
+pub type uint64_t = libc::c_ulong;
+pub const ZSTD_lazy: ZSTD_strategy = 4;
+pub type ptrdiff_t = libc::c_long;
+pub const ZSTD_error_tableLog_tooLarge: ERR_enum = 44;
+pub type FSE_DTable = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+pub const ZSTD_dfast: ZSTD_strategy = 2;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub const ZSTD_error_dstSize_tooSmall: ERR_enum = 70;
+pub type uint32_t = libc::c_uint;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_match_t {
+    pub off: U32,
+    pub len: U32,
+}
+pub type ZSTD_matchState_t_0 = ZSTD_matchState_t;
+pub const MEM_static_assert_0: unnamed = 1;
+pub const zop_predef: ZSTD_OptPrice_e = 1;
+pub const ZSTD_error_workSpace_tooSmall: ERR_enum = 66;
+pub const ZSTD_error_dictionaryCreation_failed: ERR_enum = 34;
+pub type seqDef = seqDef_s;
+pub const HUF_repeat_valid: HUF_repeat = 2;
+pub type ZSTD_allocFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
+               -> *mut libc::c_void>;
+pub type uint8_t = libc::c_uchar;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub union unnamed_1 {
+    u: U32,
+    c: [BYTE; 4],
+}
+pub type size_t = libc::c_ulong;
+pub const ZSTD_error_dictionary_wrong: ERR_enum = 32;
+pub const ZSTD_error_maxSymbolValue_tooSmall: ERR_enum = 48;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_window_t {
+    pub nextSrc: *const BYTE,
+    pub base: *const BYTE,
+    pub dictBase: *const BYTE,
+    pub dictLimit: U32,
+    pub lowLimit: U32,
+}
+pub const ZSTD_fast: ZSTD_strategy = 1;
+pub type FSE_repeat = libc::c_uint;
+pub type U32 = uint32_t;
+pub const ZSTD_noDict: ZSTD_dictMode_e = 0;
+pub type U64 = uint64_t;
+pub const ZSTD_error_dictionary_corrupted: ERR_enum = 30;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_optimal_t {
+    pub price: libc::c_int,
+    pub off: U32,
+    pub mlen: U32,
+    pub litlen: U32,
+    pub rep: [U32; 3],
+}
+pub type ZSTD_freeFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
+               -> ()>;
+pub const HUF_repeat_none: HUF_repeat = 0;
+pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+pub const ZSTD_error_frameIndex_tooLarge: ERR_enum = 100;
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -403,7 +403,7 @@ unsafe extern "C" fn MEM_64bits() -> libc::c_uint {
                 8i32 as libc::c_ulong) as libc::c_int as libc::c_uint;
 }
 unsafe extern "C" fn MEM_isLittleEndian() -> libc::c_uint {
-    let one: unnamed = unnamed{u: 1i32 as U32,};
+    let one: unnamed_1 = unnamed_1{u: 1i32 as U32,};
     return one.c[0usize] as libc::c_uint;
 }
 unsafe extern "C" fn MEM_read16(mut ptr: *const libc::c_void) -> U16 {
@@ -1430,7 +1430,7 @@ unsafe extern "C" fn ZSTD_window_hasExtDict(window: ZSTD_window_t) -> U32 {
     return (window.lowLimit < window.dictLimit) as libc::c_int as U32;
 }
 unsafe extern "C" fn ZSTD_matchState_dictMode(mut ms:
-                                                  *const ZSTD_matchState_t)
+                                                  *const ZSTD_matchState_t_0)
  -> ZSTD_dictMode_e {
     return (if 0 != ZSTD_window_hasExtDict((*ms).window) {
                 ZSTD_extDict as libc::c_int
@@ -1487,7 +1487,7 @@ unsafe extern "C" fn ZSTD_window_enforceMaxDist(mut window:
                                                 mut loadedDictEndPtr:
                                                     *mut U32,
                                                 mut dictMatchStatePtr:
-                                                    *mut *const ZSTD_matchState_t)
+                                                    *mut *const ZSTD_matchState_t_0)
  -> () {
     let current: U32 =
         (*window).base.offset_to(srcEnd as
@@ -1507,7 +1507,7 @@ unsafe extern "C" fn ZSTD_window_enforceMaxDist(mut window:
         }
         if !loadedDictEndPtr.is_null() { *loadedDictEndPtr = 0i32 as U32 }
         if !dictMatchStatePtr.is_null() {
-            *dictMatchStatePtr = 0 as *const ZSTD_matchState_t
+            *dictMatchStatePtr = 0 as *const ZSTD_matchState_t_0
         }
     };
 }
@@ -1573,7 +1573,7 @@ unsafe extern "C" fn ZSTD_debugTable(mut table: *const U32, mut max: U32)
     while u <= max { u = u.wrapping_add(1) };
 }
 #[no_mangle]
-pub unsafe extern "C" fn ZSTD_updateTree(mut ms: *mut ZSTD_matchState_t,
+pub unsafe extern "C" fn ZSTD_updateTree(mut ms: *mut ZSTD_matchState_t_0,
                                          mut cParams:
                                              *const ZSTD_compressionParameters,
                                          mut ip: *const BYTE,
@@ -1581,7 +1581,8 @@ pub unsafe extern "C" fn ZSTD_updateTree(mut ms: *mut ZSTD_matchState_t,
     ZSTD_updateTree_internal(ms, cParams, ip, iend, (*cParams).searchLength,
                              ZSTD_noDict);
 }
-unsafe extern "C" fn ZSTD_updateTree_internal(mut ms: *mut ZSTD_matchState_t,
+unsafe extern "C" fn ZSTD_updateTree_internal(mut ms:
+                                                  *mut ZSTD_matchState_t_0,
                                               mut cParams:
                                                   *const ZSTD_compressionParameters,
                                               ip: *const BYTE,
@@ -1616,7 +1617,7 @@ unsafe extern "C" fn ZSTD_updateTree_internal(mut ms: *mut ZSTD_matchState_t,
 /* * ZSTD_insertBt1() : add one or multiple positions to tree.
  *  ip : assumed <= iend-8 .
  * @return : nb of positions added */
-unsafe extern "C" fn ZSTD_insertBt1(mut ms: *mut ZSTD_matchState_t,
+unsafe extern "C" fn ZSTD_insertBt1(mut ms: *mut ZSTD_matchState_t_0,
                                     mut cParams:
                                         *const ZSTD_compressionParameters,
                                     ip: *const BYTE, iend: *const BYTE,
@@ -1749,7 +1750,7 @@ unsafe extern "C" fn ZSTD_insertBt1(mut ms: *mut ZSTD_matchState_t,
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btopt(mut ms:
-                                                      *mut ZSTD_matchState_t,
+                                                      *mut ZSTD_matchState_t_0,
                                                   mut seqStore:
                                                       *mut seqStore_t,
                                                   mut rep: *mut U32,
@@ -1763,7 +1764,7 @@ pub unsafe extern "C" fn ZSTD_compressBlock_btopt(mut ms:
                                           srcSize, 0i32, ZSTD_noDict);
 }
 unsafe extern "C" fn ZSTD_compressBlock_opt_generic(mut ms:
-                                                        *mut ZSTD_matchState_t,
+                                                        *mut ZSTD_matchState_t_0,
                                                     mut seqStore:
                                                         *mut seqStore_t,
                                                     mut rep: *mut U32,
@@ -2381,7 +2382,7 @@ unsafe extern "C" fn ZSTD_litLengthPrice(litLength: U32,
                                                                                                                            }))
     };
 }
-unsafe extern "C" fn ZSTD_BtGetAllMatches(mut ms: *mut ZSTD_matchState_t,
+unsafe extern "C" fn ZSTD_BtGetAllMatches(mut ms: *mut ZSTD_matchState_t_0,
                                           mut cParams:
                                               *const ZSTD_compressionParameters,
                                           mut ip: *const BYTE,
@@ -2429,7 +2430,7 @@ unsafe extern "C" fn ZSTD_BtGetAllMatches(mut ms: *mut ZSTD_matchState_t,
     };
 }
 unsafe extern "C" fn ZSTD_insertBtAndGetAllMatches(mut ms:
-                                                       *mut ZSTD_matchState_t,
+                                                       *mut ZSTD_matchState_t_0,
                                                    mut cParams:
                                                        *const ZSTD_compressionParameters,
                                                    ip: *const BYTE,
@@ -2486,11 +2487,11 @@ unsafe extern "C" fn ZSTD_insertBtAndGetAllMatches(mut ms:
     let mut dummy32: U32 = 0;
     let mut mnum: U32 = 0i32 as U32;
     let mut nbCompares: U32 = 1u32 << (*cParams).searchLog;
-    let mut dms: *const ZSTD_matchState_t =
+    let mut dms: *const ZSTD_matchState_t_0 =
         if dictMode as libc::c_uint ==
                ZSTD_dictMatchState as libc::c_int as libc::c_uint {
             (*ms).dictMatchState
-        } else { 0 as *const ZSTD_matchState_t };
+        } else { 0 as *const ZSTD_matchState_t_0 };
     let dmsBase: *const BYTE =
         if dictMode as libc::c_uint ==
                ZSTD_dictMatchState as libc::c_int as libc::c_uint {
@@ -2821,7 +2822,7 @@ unsafe extern "C" fn ZSTD_insertBtAndGetAllMatches(mut ms:
     return mnum;
 }
 unsafe extern "C" fn ZSTD_insertAndFindFirstIndexHash3(mut ms:
-                                                           *mut ZSTD_matchState_t,
+                                                           *mut ZSTD_matchState_t_0,
                                                        ip: *const BYTE)
  -> U32 {
     let hashTable3: *mut U32 = (*ms).hashTable3;
@@ -3112,7 +3113,7 @@ unsafe extern "C" fn ZSTD_downscaleStat(mut table: *mut U32,
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btultra(mut ms:
-                                                        *mut ZSTD_matchState_t,
+                                                        *mut ZSTD_matchState_t_0,
                                                     mut seqStore:
                                                         *mut seqStore_t,
                                                     mut rep: *mut U32,
@@ -3127,7 +3128,7 @@ pub unsafe extern "C" fn ZSTD_compressBlock_btultra(mut ms:
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btopt_dictMatchState(mut ms:
-                                                                     *mut ZSTD_matchState_t,
+                                                                     *mut ZSTD_matchState_t_0,
                                                                  mut seqStore:
                                                                      *mut seqStore_t,
                                                                  mut rep:
@@ -3144,7 +3145,7 @@ pub unsafe extern "C" fn ZSTD_compressBlock_btopt_dictMatchState(mut ms:
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btultra_dictMatchState(mut ms:
-                                                                       *mut ZSTD_matchState_t,
+                                                                       *mut ZSTD_matchState_t_0,
                                                                    mut seqStore:
                                                                        *mut seqStore_t,
                                                                    mut rep:
@@ -3161,7 +3162,7 @@ pub unsafe extern "C" fn ZSTD_compressBlock_btultra_dictMatchState(mut ms:
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btopt_extDict(mut ms:
-                                                              *mut ZSTD_matchState_t,
+                                                              *mut ZSTD_matchState_t_0,
                                                           mut seqStore:
                                                               *mut seqStore_t,
                                                           mut rep: *mut U32,
@@ -3176,7 +3177,7 @@ pub unsafe extern "C" fn ZSTD_compressBlock_btopt_extDict(mut ms:
 }
 #[no_mangle]
 pub unsafe extern "C" fn ZSTD_compressBlock_btultra_extDict(mut ms:
-                                                                *mut ZSTD_matchState_t,
+                                                                *mut ZSTD_matchState_t_0,
                                                             mut seqStore:
                                                                 *mut seqStore_t,
                                                             mut rep: *mut U32,

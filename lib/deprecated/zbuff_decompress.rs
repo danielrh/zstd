@@ -27,39 +27,6 @@ extern "C" {
     fn ZSTD_createDStream_advanced(customMem: ZSTD_customMem)
      -> *mut ZSTD_DStream;
 }
-pub type ZBUFF_DCtx = ZSTD_DStream;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_inBuffer_s {
-    pub src: *const libc::c_void,
-    pub size: size_t,
-    pub pos: size_t,
-}
-/* ***************************
-*  Streaming
-****************************/
-pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
-pub type ZSTD_DCtx = ZSTD_DCtx_s;
-pub type size_t = libc::c_ulong;
-/* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
-pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
-/* *< recommended size for output buffer. Guarantee to successfully flush at least one complete compressed block in all circumstances. */
-/* *< recommended size for input buffer */
-pub type ZSTD_DStream = ZSTD_DCtx;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_customMem {
-    pub customAlloc: ZSTD_allocFunction,
-    pub customFree: ZSTD_freeFunction,
-    pub opaque: *mut libc::c_void,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_outBuffer_s {
-    pub dst: *mut libc::c_void,
-    pub size: size_t,
-    pub pos: size_t,
-}
 /* ! Custom memory allocation :
  *  These prototypes make it possible to pass your own allocation/free functions.
  *  ZSTD_customMem is provided at creation time, using ZSTD_create*_advanced() variants listed below.
@@ -68,6 +35,39 @@ pub struct ZSTD_outBuffer_s {
 pub type ZSTD_allocFunction =
     Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
                -> *mut libc::c_void>;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_outBuffer_s {
+    pub dst: *mut libc::c_void,
+    pub size: size_t,
+    pub pos: size_t,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_inBuffer_s {
+    pub src: *const libc::c_void,
+    pub size: size_t,
+    pub pos: size_t,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_customMem {
+    pub customAlloc: ZSTD_allocFunction,
+    pub customFree: ZSTD_freeFunction,
+    pub opaque: *mut libc::c_void,
+}
+pub type ZSTD_DCtx = ZSTD_DCtx_s;
+pub type size_t = libc::c_ulong;
+/* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
+pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
+/* *< recommended size for output buffer. Guarantee to successfully flush at least one complete compressed block in all circumstances. */
+/* *< recommended size for input buffer */
+pub type ZSTD_DStream = ZSTD_DCtx;
+/* ***************************
+*  Streaming
+****************************/
+pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
+pub type ZBUFF_DCtx = ZSTD_DStream;
 pub type ZSTD_freeFunction =
     Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
                -> ()>;

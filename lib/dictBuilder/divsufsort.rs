@@ -26,32 +26,25 @@ extern "C" {
     #[no_mangle]
     fn free(__ptr: *mut libc::c_void) -> ();
 }
+pub type trbudget_t = _trbudget_t;
+pub type __off64_t = libc::c_long;
+pub type __off_t = libc::c_long;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct _trbudget_t {
+    pub chance: libc::c_int,
+    pub remain: libc::c_int,
+    pub incval: libc::c_int,
+    pub count: libc::c_int,
+}
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct unnamed {
     pub a: *mut libc::c_int,
     pub b: *mut libc::c_int,
-    pub c: libc::c_int,
-    pub d: libc::c_int,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct unnamed_0 {
-    pub a: *mut libc::c_int,
-    pub b: *mut libc::c_int,
     pub c: *mut libc::c_int,
     pub d: libc::c_int,
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct unnamed_1 {
-    pub a: *const libc::c_int,
-    pub b: *mut libc::c_int,
-    pub c: *mut libc::c_int,
-    pub d: libc::c_int,
-    pub e: libc::c_int,
-}
-pub type size_t = libc::c_ulong;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct _IO_marker {
@@ -59,9 +52,15 @@ pub struct _IO_marker {
     pub _sbuf: *mut _IO_FILE,
     pub _pos: libc::c_int,
 }
-pub type _IO_lock_t = ();
-pub type trbudget_t = _trbudget_t;
-pub type __off64_t = libc::c_long;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct unnamed_0 {
+    pub a: *mut libc::c_int,
+    pub b: *mut libc::c_int,
+    pub c: libc::c_int,
+    pub d: libc::c_int,
+}
+pub type size_t = libc::c_ulong;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct _IO_FILE {
@@ -97,13 +96,14 @@ pub struct _IO_FILE {
 }
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct _trbudget_t {
-    pub chance: libc::c_int,
-    pub remain: libc::c_int,
-    pub incval: libc::c_int,
-    pub count: libc::c_int,
+pub struct unnamed_1 {
+    pub a: *const libc::c_int,
+    pub b: *mut libc::c_int,
+    pub c: *mut libc::c_int,
+    pub d: libc::c_int,
+    pub e: libc::c_int,
 }
-pub type __off_t = libc::c_long;
+pub type _IO_lock_t = ();
 /* *
  * Constructs the suffix array of a given string.
  * @param T [0..n-1] The input string.
@@ -2262,11 +2262,11 @@ unsafe extern "C" fn ss_mintrosort(mut T: *const libc::c_uchar,
                                    mut first: *mut libc::c_int,
                                    mut last: *mut libc::c_int,
                                    mut depth: libc::c_int) -> () {
-    let mut stack: [unnamed; 16] =
-        [unnamed{a: 0 as *mut libc::c_int,
-                 b: 0 as *mut libc::c_int,
-                 c: 0,
-                 d: 0,}; 16];
+    let mut stack: [unnamed_0; 16] =
+        [unnamed_0{a: 0 as *mut libc::c_int,
+                   b: 0 as *mut libc::c_int,
+                   c: 0,
+                   d: 0,}; 16];
     let mut Td: *const libc::c_uchar = 0 as *const libc::c_uchar;
     let mut a: *mut libc::c_int = 0 as *mut libc::c_int;
     let mut b: *mut libc::c_int = 0 as *mut libc::c_int;
@@ -3071,11 +3071,11 @@ unsafe extern "C" fn ss_swapmerge(mut T: *const libc::c_uchar,
                                   mut buf: *mut libc::c_int,
                                   mut bufsize: libc::c_int,
                                   mut depth: libc::c_int) -> () {
-    let mut stack: [unnamed_0; 32] =
-        [unnamed_0{a: 0 as *mut libc::c_int,
-                   b: 0 as *mut libc::c_int,
-                   c: 0 as *mut libc::c_int,
-                   d: 0,}; 32];
+    let mut stack: [unnamed; 32] =
+        [unnamed{a: 0 as *mut libc::c_int,
+                 b: 0 as *mut libc::c_int,
+                 c: 0 as *mut libc::c_int,
+                 d: 0,}; 32];
     let mut l: *mut libc::c_int = 0 as *mut libc::c_int;
     let mut r: *mut libc::c_int = 0 as *mut libc::c_int;
     let mut lm: *mut libc::c_int = 0 as *mut libc::c_int;

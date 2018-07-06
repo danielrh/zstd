@@ -39,13 +39,7 @@ extern "C" {
                                  params: ZSTD_parameters,
                                  pledgedSrcSize: libc::c_ulonglong) -> size_t;
 }
-pub const ZSTD_greedy: ZSTD_strategy = 3;
-pub type size_t = libc::c_ulong;
-pub type ZSTD_freeFunction =
-    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
-               -> ()>;
-pub const ZSTD_dfast: ZSTD_strategy = 2;
-pub const ZSTD_lazy: ZSTD_strategy = 4;
+pub const ZSTD_fast: ZSTD_strategy = 1;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_compressionParameters {
@@ -57,30 +51,6 @@ pub struct ZSTD_compressionParameters {
     pub targetLength: libc::c_uint,
     pub strategy: ZSTD_strategy,
 }
-pub const ZSTD_btlazy2: ZSTD_strategy = 6;
-pub const ZSTD_btultra: ZSTD_strategy = 8;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_customMem {
-    pub customAlloc: ZSTD_allocFunction,
-    pub customFree: ZSTD_freeFunction,
-    pub opaque: *mut libc::c_void,
-}
-pub const ZSTD_btopt: ZSTD_strategy = 7;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct ZSTD_outBuffer_s {
-    pub dst: *mut libc::c_void,
-    pub size: size_t,
-    pub pos: size_t,
-}
-/* *< position where writing stopped. Will be updated. Necessarily 0 <= pos <= size */
-pub type ZSTD_CStream = ZSTD_CCtx;
-pub const ZSTD_fast: ZSTD_strategy = 1;
-/* ***************************
-*  Streaming
-****************************/
-pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_inBuffer_s {
@@ -88,20 +58,13 @@ pub struct ZSTD_inBuffer_s {
     pub size: size_t,
     pub pos: size_t,
 }
-/* **************************************
-*  Explicit context
-***************************************/
-/* !< maximum compression level available */
-/* !< provides readable string from an error code */
-pub type ZSTD_CCtx = ZSTD_CCtx_s;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub struct ZSTD_parameters {
-    pub cParams: ZSTD_compressionParameters,
-    pub fParams: ZSTD_frameParameters,
+pub struct ZSTD_outBuffer_s {
+    pub dst: *mut libc::c_void,
+    pub size: size_t,
+    pub pos: size_t,
 }
-/* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
-pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
 /* ! Custom memory allocation :
  *  These prototypes make it possible to pass your own allocation/free functions.
  *  ZSTD_customMem is provided at creation time, using ZSTD_create*_advanced() variants listed below.
@@ -110,6 +73,43 @@ pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
 pub type ZSTD_allocFunction =
     Option<unsafe extern "C" fn(_: *mut libc::c_void, _: size_t)
                -> *mut libc::c_void>;
+/* ***************************
+*  Streaming
+****************************/
+pub type ZSTD_inBuffer = ZSTD_inBuffer_s;
+/* *< position where reading stopped. Will be updated. Necessarily 0 <= pos <= size */
+pub type ZSTD_outBuffer = ZSTD_outBuffer_s;
+pub const ZSTD_dfast: ZSTD_strategy = 2;
+/* *< position where writing stopped. Will be updated. Necessarily 0 <= pos <= size */
+pub type ZSTD_CStream = ZSTD_CCtx;
+pub type ZBUFF_CCtx = ZSTD_CStream;
+/* **************************************
+*  Explicit context
+***************************************/
+/* !< maximum compression level available */
+/* !< provides readable string from an error code */
+pub type ZSTD_CCtx = ZSTD_CCtx_s;
+pub type size_t = libc::c_ulong;
+pub const ZSTD_btultra: ZSTD_strategy = 8;
+pub const ZSTD_btopt: ZSTD_strategy = 7;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_customMem {
+    pub customAlloc: ZSTD_allocFunction,
+    pub customFree: ZSTD_freeFunction,
+    pub opaque: *mut libc::c_void,
+}
+pub const ZSTD_greedy: ZSTD_strategy = 3;
+pub type ZSTD_strategy = libc::c_uint;
+pub const ZSTD_lazy: ZSTD_strategy = 4;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct ZSTD_parameters {
+    pub cParams: ZSTD_compressionParameters,
+    pub fParams: ZSTD_frameParameters,
+}
+pub const ZSTD_btlazy2: ZSTD_strategy = 6;
+pub const ZSTD_lazy2: ZSTD_strategy = 5;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct ZSTD_frameParameters {
@@ -117,9 +117,9 @@ pub struct ZSTD_frameParameters {
     pub checksumFlag: libc::c_uint,
     pub noDictIDFlag: libc::c_uint,
 }
-pub type ZBUFF_CCtx = ZSTD_CStream;
-pub const ZSTD_lazy2: ZSTD_strategy = 5;
-pub type ZSTD_strategy = libc::c_uint;
+pub type ZSTD_freeFunction =
+    Option<unsafe extern "C" fn(_: *mut libc::c_void, _: *mut libc::c_void)
+               -> ()>;
 #[no_mangle]
 pub unsafe extern "C" fn ZBUFF_createCCtx() -> *mut ZBUFF_CCtx {
     return ZSTD_createCStream();

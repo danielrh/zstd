@@ -12,10 +12,10 @@ extern "C" {
      -> *mut libc::c_void;
     #[no_mangle]
     fn ERR_getErrorString(code: ERR_enum) -> *const libc::c_char;
-    /* ! Constructor and Destructor of FSE_DTable.
-    Note that its size depends on 'tableLog' */
     /* ! Constructor and Destructor of FSE_CTable.
     Note that FSE_CTable size depends on 'tableLog' and 'maxSymbolValue' */
+    /* ! Constructor and Destructor of FSE_DTable.
+    Note that its size depends on 'tableLog' */
     /* ! FSE_readNCount():
     Read compactly saved 'normalizedCounter' from 'rBuffer'.
     @return : size read from 'rBuffer',
@@ -70,42 +70,62 @@ If there is an error, the function will return an ErrorCode (which can be tested
                            workSpace: *mut FSE_DTable, maxLog: libc::c_uint)
      -> size_t;
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_CState_t {
-    pub value: ptrdiff_t,
-    pub stateTable: *const libc::c_void,
-    pub symbolTT: *const libc::c_void,
-    pub stateLog: libc::c_uint,
-}
-pub const ZSTD_error_dstSize_tooSmall: ZSTD_ErrorCode = 70;
-pub type BIT_DStream_status = libc::c_uint;
-pub const BIT_DStream_overflow: BIT_DStream_status = 3;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-pub const MEM_static_assert: unnamed_1 = 1;
-pub const ZSTD_error_prefix_unknown: ZSTD_ErrorCode = 10;
-pub const ZSTD_error_frameParameter_windowTooLarge: ZSTD_ErrorCode = 16;
-pub const ZSTD_error_GENERIC: ZSTD_ErrorCode = 1;
-pub const ZSTD_error_parameter_outOfBound: ZSTD_ErrorCode = 42;
-pub type uint8_t = libc::c_uchar;
+pub type ptrdiff_t = libc::c_long;
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
 pub struct unalign64 {
     pub v: U64,
 }
 pub const ZSTD_error_dictionary_wrong: ZSTD_ErrorCode = 32;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DTableHeader {
+    pub tableLog: U16,
+    pub fastMode: U16,
+}
+pub const ZSTD_error_parameter_unsupported: ZSTD_ErrorCode = 40;
 pub const ZSTD_error_init_missing: ZSTD_ErrorCode = 62;
-pub const ZSTD_error_seekableIO: ZSTD_ErrorCode = 102;
+pub const ZSTD_error_frameParameter_windowTooLarge: ZSTD_ErrorCode = 16;
+pub const ZSTD_error_frameIndex_tooLarge: ZSTD_ErrorCode = 100;
+pub const BIT_DStream_overflow: BIT_DStream_status = 3;
+pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
+pub const ZSTD_error_parameter_outOfBound: ZSTD_ErrorCode = 42;
+pub type BYTE = uint8_t;
+pub const MEM_static_assert: unnamed_1 = 1;
+pub type U64 = uint64_t;
+pub const ZSTD_error_workSpace_tooSmall: ZSTD_ErrorCode = 66;
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
-pub struct unalign16 {
-    pub v: U16,
+pub struct unalignArch {
+    pub v: size_t,
 }
+pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
+pub type ERR_enum = ZSTD_ErrorCode;
+pub const ZSTD_error_dstSize_tooSmall: ZSTD_ErrorCode = 70;
+pub const ZSTD_error_maxSymbolValue_tooSmall: ZSTD_ErrorCode = 48;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_decode_t {
+    pub newState: libc::c_ushort,
+    pub symbol: libc::c_uchar,
+    pub nbBits: libc::c_uchar,
+}
+pub type uint8_t = libc::c_uchar;
+pub const ZSTD_error_no_error: ZSTD_ErrorCode = 0;
+pub const ZSTD_error_checksum_wrong: ZSTD_ErrorCode = 22;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
+pub type FSE_CTable = libc::c_uint;
+pub const ZSTD_error_srcSize_wrong: ZSTD_ErrorCode = 72;
+pub const BIT_DStream_completed: BIT_DStream_status = 2;
+pub const ZSTD_error_prefix_unknown: ZSTD_ErrorCode = 10;
+pub const ZSTD_error_seekableIO: ZSTD_ErrorCode = 102;
+pub const ZSTD_error_dictionaryCreation_failed: ZSTD_ErrorCode = 34;
 pub const ZSTD_error_stage_wrong: ZSTD_ErrorCode = 60;
+pub type BIT_DStream_status = libc::c_uint;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct BIT_DStream_t {
@@ -115,10 +135,7 @@ pub struct BIT_DStream_t {
     pub start: *const libc::c_char,
     pub limitPtr: *const libc::c_char,
 }
-pub type U32 = uint32_t;
-pub const ZSTD_error_frameIndex_tooLarge: ZSTD_ErrorCode = 100;
-pub const ZSTD_error_corruption_detected: ZSTD_ErrorCode = 20;
-pub type FSE_DTable = libc::c_uint;
+pub type unnamed = libc::c_uint;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct BIT_CStream_t {
@@ -128,73 +145,56 @@ pub struct BIT_CStream_t {
     pub ptr: *mut libc::c_char,
     pub endPtr: *mut libc::c_char,
 }
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_symbolCompressionTransform {
-    pub deltaFindState: libc::c_int,
-    pub deltaNbBits: U32,
-}
-pub const ZSTD_error_memory_allocation: ZSTD_ErrorCode = 64;
-pub const BIT_DStream_completed: BIT_DStream_status = 2;
-pub const ZSTD_error_parameter_unsupported: ZSTD_ErrorCode = 40;
-pub const BIT_DStream_unfinished: BIT_DStream_status = 0;
-pub const ZSTD_error_tableLog_tooLarge: ZSTD_ErrorCode = 44;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub type unnamed = libc::c_uint;
-pub type uint64_t = libc::c_ulong;
-pub type uint16_t = libc::c_ushort;
-pub const ZSTD_error_dictionary_corrupted: ZSTD_ErrorCode = 30;
-pub const ZSTD_error_version_unsupported: ZSTD_ErrorCode = 12;
-pub type U64 = uint64_t;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DState_t {
-    pub state: size_t,
-    pub table: *const libc::c_void,
-}
-pub const ZSTD_error_frameParameter_unsupported: ZSTD_ErrorCode = 14;
-pub const MEM_static_assert_0: unnamed = 1;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_DTableHeader {
-    pub tableLog: U16,
-    pub fastMode: U16,
-}
-pub const ZSTD_error_dictionaryCreation_failed: ZSTD_ErrorCode = 34;
-pub const BIT_DStream_endOfBuffer: BIT_DStream_status = 1;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct FSE_decode_t {
-    pub newState: libc::c_ushort,
-    pub symbol: libc::c_uchar,
-    pub nbBits: libc::c_uchar,
-}
-pub type ERR_enum = ZSTD_ErrorCode;
-pub type uint32_t = libc::c_uint;
-pub type FSE_CTable = libc::c_uint;
+pub const ZSTD_error_corruption_detected: ZSTD_ErrorCode = 20;
+pub const ZSTD_error_GENERIC: ZSTD_ErrorCode = 1;
+pub const ZSTD_error_maxCode: ZSTD_ErrorCode = 120;
+pub type FSE_DTable = libc::c_uint;
 pub type size_t = libc::c_ulong;
-pub const ZSTD_error_checksum_wrong: ZSTD_ErrorCode = 22;
+pub type uint32_t = libc::c_uint;
+pub type U16 = uint16_t;
+pub const ZSTD_error_tableLog_tooLarge: ZSTD_ErrorCode = 44;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub union unnamed_0 {
     u: U32,
     c: [BYTE; 4],
 }
-pub type unnamed_1 = libc::c_uint;
-pub const ZSTD_error_maxSymbolValue_tooLarge: ZSTD_ErrorCode = 46;
-pub type U16 = uint16_t;
-pub const ZSTD_error_srcSize_wrong: ZSTD_ErrorCode = 72;
 pub type ZSTD_ErrorCode = libc::c_uint;
-pub const ZSTD_error_maxSymbolValue_tooSmall: ZSTD_ErrorCode = 48;
-pub const ZSTD_error_maxCode: ZSTD_ErrorCode = 120;
-pub const ZSTD_error_workSpace_tooSmall: ZSTD_ErrorCode = 66;
-pub const ZSTD_error_no_error: ZSTD_ErrorCode = 0;
-pub type BYTE = uint8_t;
-pub type ptrdiff_t = libc::c_long;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_CState_t {
+    pub value: ptrdiff_t,
+    pub stateTable: *const libc::c_void,
+    pub symbolTT: *const libc::c_void,
+    pub stateLog: libc::c_uint,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_DState_t {
+    pub state: size_t,
+    pub table: *const libc::c_void,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct FSE_symbolCompressionTransform {
+    pub deltaFindState: libc::c_int,
+    pub deltaNbBits: U32,
+}
+pub const ZSTD_error_version_unsupported: ZSTD_ErrorCode = 12;
+pub type uint64_t = libc::c_ulong;
+pub const MEM_static_assert_0: unnamed = 1;
+pub type unnamed_1 = libc::c_uint;
+pub const ZSTD_error_memory_allocation: ZSTD_ErrorCode = 64;
+pub type U32 = uint32_t;
+pub type uint16_t = libc::c_ushort;
+pub const ZSTD_error_dictionary_corrupted: ZSTD_ErrorCode = 30;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign16 {
+    pub v: U16,
+}
+pub const ZSTD_error_maxSymbolValue_tooLarge: ZSTD_ErrorCode = 46;
+pub const ZSTD_error_frameParameter_unsupported: ZSTD_ErrorCode = 14;
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==

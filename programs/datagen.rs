@@ -45,52 +45,26 @@ extern "C" {
     fn memset(_: *mut libc::c_void, _: libc::c_int, _: libc::c_ulong)
      -> *mut libc::c_void;
 }
-pub type uint32_t = libc::c_uint;
-pub type uint64_t = libc::c_ulong;
-pub type __off_t = libc::c_long;
-pub type U32 = uint32_t;
-#[derive ( Copy , Clone )]
-#[repr ( C )]
-pub struct _IO_marker {
-    pub _next: *mut _IO_marker,
-    pub _sbuf: *mut _IO_FILE,
-    pub _pos: libc::c_int,
-}
-pub type __off64_t = libc::c_long;
-pub type FILE = _IO_FILE;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign64 {
-    pub v: U64,
-}
-pub type U64 = uint64_t;
 #[derive ( Copy , Clone )]
 #[repr ( C , packed )]
 pub struct unalign16 {
     pub v: U16,
 }
-pub const MEM_static_assert: unnamed = 1;
-pub type unnamed = libc::c_uint;
-pub type uint16_t = libc::c_ushort;
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalign32 {
-    pub v: U32,
-}
-#[derive ( Copy , Clone )]
-#[repr ( C , packed )]
-pub struct unalignArch {
-    pub v: size_t,
-}
-pub type U16 = uint16_t;
+pub type U64 = uint64_t;
+pub type BYTE = uint8_t;
+pub type _IO_lock_t = ();
+pub type uint32_t = libc::c_uint;
+pub type U32 = uint32_t;
+pub type FILE = _IO_FILE;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
-pub union unnamed_0 {
+pub union unnamed {
     u: U32,
     c: [BYTE; 4],
 }
-pub type _IO_lock_t = ();
-pub type BYTE = uint8_t;
+pub const MEM_static_assert: unnamed_0 = 1;
+pub type uint16_t = libc::c_ushort;
+pub type __off64_t = libc::c_long;
 #[derive ( Copy , Clone )]
 #[repr ( C )]
 pub struct _IO_FILE {
@@ -124,8 +98,34 @@ pub struct _IO_FILE {
     pub _mode: libc::c_int,
     pub _unused2: [libc::c_char; 20],
 }
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign32 {
+    pub v: U32,
+}
 pub type uint8_t = libc::c_uchar;
+pub type uint64_t = libc::c_ulong;
+#[derive ( Copy , Clone )]
+#[repr ( C )]
+pub struct _IO_marker {
+    pub _next: *mut _IO_marker,
+    pub _sbuf: *mut _IO_FILE,
+    pub _pos: libc::c_int,
+}
+pub type __off_t = libc::c_long;
 pub type size_t = libc::c_ulong;
+pub type unnamed_0 = libc::c_uint;
+pub type U16 = uint16_t;
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalignArch {
+    pub v: size_t,
+}
+#[derive ( Copy , Clone )]
+#[repr ( C , packed )]
+pub struct unalign64 {
+    pub v: U64,
+}
 unsafe extern "C" fn MEM_check() -> () { }
 unsafe extern "C" fn MEM_32bits() -> libc::c_uint {
     return (::std::mem::size_of::<size_t>() as libc::c_ulong ==
@@ -136,7 +136,7 @@ unsafe extern "C" fn MEM_64bits() -> libc::c_uint {
                 8i32 as libc::c_ulong) as libc::c_int as libc::c_uint;
 }
 unsafe extern "C" fn MEM_isLittleEndian() -> libc::c_uint {
-    let one: unnamed_0 = unnamed_0{u: 1i32 as U32,};
+    let one: unnamed = unnamed{u: 1i32 as U32,};
     return one.c[0usize] as libc::c_uint;
 }
 unsafe extern "C" fn MEM_read16(mut ptr: *const libc::c_void) -> U16 {
