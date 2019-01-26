@@ -58,10 +58,6 @@
 
 #define BMK_RUNTEST_DEFAULT_MS 1000
 
-static const size_t maxMemory = (sizeof(size_t)==4)  ?
-                    /* 32-bit */ (2 GB - 64 MB) :
-                    /* 64-bit */ (size_t)(1ULL << ((sizeof(size_t)*8)-31));
-
 
 /* *************************************
 *  console display
@@ -718,6 +714,9 @@ static size_t BMK_findMaxMem(U64 requiredMem)
 {
     size_t const step = 64 MB;
     BYTE* testmem = NULL;
+size_t maxMemory = (sizeof(size_t)==4)  ?
+                    /* 32-bit */ (2 GB - 64 MB) :
+                    /* 64-bit */ (size_t)(1ULL << ((sizeof(size_t)*8)-31));
 
     requiredMem = (((requiredMem >> 26) + 1) << 26);
     requiredMem += step;

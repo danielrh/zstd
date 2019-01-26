@@ -45,7 +45,6 @@
 #define MEMMULT 11    /* rough estimation : memory cost to analyze 1 byte of sample */
 #define COVER_MEMMULT 9    /* rough estimation : memory cost to analyze 1 byte of sample */
 #define FASTCOVER_MEMMULT 1    /* rough estimation : memory cost to analyze 1 byte of sample */
-static const size_t g_maxMemory = (sizeof(size_t) == 4) ? (2 GB - 64 MB) : ((size_t)(512 MB) << sizeof(size_t));
 
 #define NOISELENGTH 32
 
@@ -178,6 +177,7 @@ static void DiB_shuffle(const char** fileNamesTable, unsigned nbFiles) {
 **********************************************************/
 static size_t DiB_findMaxMem(unsigned long long requiredMem)
 {
+    size_t g_maxMemory = (sizeof(size_t) == 4) ? (2 GB - 64 MB) : ((size_t)(512 MB) << sizeof(size_t));
     size_t const step = 8 MB;
     void* testmem = NULL;
 
