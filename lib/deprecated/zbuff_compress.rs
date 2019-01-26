@@ -335,7 +335,7 @@ pub unsafe extern "C" fn ZBUFF_recommendedCOutSize() -> size_t {
 /*--- Dependency ---*/
 /* ZSTD_parameters, ZSTD_customMem */
 /*--- Custom memory allocator ---*/
-/*! ZBUFF_createCCtx_advanced() :
+/* ZBUFF_createCCtx_advanced() :
  *  Create a ZBUFF compression context using external alloc and free functions */
 #[no_mangle]
 pub unsafe extern "C" fn ZBUFF_createCCtx_advanced(mut customMem:

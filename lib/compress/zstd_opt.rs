@@ -248,7 +248,7 @@ pub struct seqDef_s {
 /* *****************************************
 *  FSE symbol compression API
 *******************************************/
-/*!
+/*
    This API consists of small unitary functions, which highly benefit from being inlined.
    Hence their body are included in next section.
 */

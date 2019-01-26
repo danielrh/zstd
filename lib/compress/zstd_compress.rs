@@ -6,6 +6,8 @@
          unused_mut)]
 #![feature(extern_types, libc, ptr_wrapping_offset_from)]
 extern crate libc;
+use ZSTD_cpuid;
+use ZSTD_cpuid_bmi2;
 extern "C" {
     pub type HUF_CElt_s;
     /*
@@ -48,7 +50,7 @@ extern "C" {
     /*-*****************************************
 *  FSE detailed API
 ******************************************/
-/*!
+/*
 FSE_compress() does the following:
 1. count symbol occurrence from source[] into table count[] (see hist.h)
 2. normalize counters so that sum(count[]) == Power_of_2 (2^tableLog)
@@ -774,7 +776,7 @@ pub const FSE_repeat_none: FSE_repeat = 0;
 /* *****************************************
 *  FSE symbol compression API
 *******************************************/
-/*!
+/*
    This API consists of small unitary functions, which highly benefit from being inlined.
    Hence their body are included in next section.
 */
@@ -1726,9 +1728,6 @@ unsafe extern "C" fn MEM_writeLEST(mut memPtr: *mut libc::c_void,
         MEM_writeLE32(memPtr, val as U32);
     } else { MEM_writeLE64(memPtr, val); };
 }
-unsafe extern "C" fn ZSTD_cpuid_bmi2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
-    return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
-}
 /*-****************************************
 *  Error codes handling
 ******************************************/
@@ -1903,7 +1902,7 @@ unsafe extern "C" fn FSE_bitCost(mut symbolTTPtr: *const libc::c_void,
 /* **************************************
 *  Simple API
 ***************************************/
-/*! ZSTD_compress() :
+/* ZSTD_compress() :
  *  Compresses `src` content as a single zstd compressed frame into already allocated `dst`.
  *  Hint : compression runs faster if `dstCapacity` >=  `ZSTD_compressBound(srcSize)`.
  *  @return : compressed size written into `dst` (<= `dstCapacity),
@@ -2244,7 +2243,7 @@ pub unsafe extern "C" fn ZSTD_compressCCtx(mut cctx: *mut ZSTD_CCtx,
 /* *************************
 *  Simple dictionary API
 ***************************/
-/*! ZSTD_compress_usingDict() :
+/* ZSTD_compress_usingDict() :
  *  Compression at an explicit compression level using a Dictionary.
  *  A dictionary can be any arbitrary data segment (also called a prefix),
  *  or a buffer with specified information (see dictBuilder/zdict.h).
@@ -5270,7 +5269,7 @@ unsafe extern "C" fn ZSTD_compress_insertDictionary(mut bs:
  * See :
  * https://github.com/facebook/zstd/blob/master/doc/zstd_compression_format.md#dictionary-format
  */
-/*! ZSTD_loadZstdDictionary() :
+/* ZSTD_loadZstdDictionary() :
  * @return : dictID, or an error code
  *  assumptions : magic number supposed already checked
  *                dictSize supposed > 8

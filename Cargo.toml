@@ -1,0 +1,12 @@
+[package]
+name="zstd"
+version = "0.0.1"
+authors = ["Yann Collet", "Daniel Reiter Horn"]
+license = "BSD-3-Clause"
+autobins = false
+[lib]
+#crate-type=["cdylib", "rlib"]
+path="lib/lib.rs"
+[[bin]]
+name="zstd"
+path="programs/zstdcli.rs"

@@ -236,7 +236,7 @@ pub const XXH_static_assert_0: unnamed_0 = 1;
 /* *************************************
 *  Tuning parameters
 ***************************************/
-/*!XXH_FORCE_MEMORY_ACCESS :
+/*XXH_FORCE_MEMORY_ACCESS :
  * By default, access to unaligned memory is controlled by `memcpy()`, which is safe and portable.
  * Unfortunately, on some target/compiler combinations, the generated assembly is sub-optimal.
  * The below switch allow to select different access method for improved performance.

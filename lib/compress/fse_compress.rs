@@ -201,7 +201,7 @@ pub type FSE_CTable = libc::c_uint;
 /* *****************************************
 *  FSE symbol compression API
 *******************************************/
-/*!
+/*
    This API consists of small unitary functions, which highly benefit from being inlined.
    Hence their body are included in next section.
 */
@@ -390,7 +390,7 @@ unsafe extern "C" fn BIT_flushBitsFast(mut bitC: *mut BIT_CStream_t) {
 /*-****************************************
 *  FSE simple functions
 ******************************************/
-/*! FSE_compress() :
+/* FSE_compress() :
     Compress content of buffer 'src', of size 'srcSize', into destination buffer 'dst'.
     'dst' buffer must be already allocated. Compression runs faster is dstCapacity >= FSE_compressBound(srcSize).
     @return : size of compressed data (<= dstCapacity).
@@ -410,7 +410,7 @@ pub unsafe extern "C" fn FSE_compress(mut dst: *mut libc::c_void,
 /*-*****************************************
 *  FSE advanced functions
 ******************************************/
-/*! FSE_compress2() :
+/* FSE_compress2() :
     Same as FSE_compress(), but allows the selection of 'maxSymbolValue' and 'tableLog'
     Both parameters can be defined as '0' to mean : use default value
     @return : size of compressed data
@@ -1260,7 +1260,7 @@ unsafe extern "C" fn FSE_minTableLog(mut srcSize: size_t,
 /*-*****************************************
 *  FSE detailed API
 ******************************************/
-/*!
+/*
 FSE_compress() does the following:
 1. count symbol occurrence from source[] into table count[] (see hist.h)
 2. normalize counters so that sum(count[]) == Power_of_2 (2^tableLog)

@@ -5,7 +5,15 @@
          non_upper_case_globals,
          unused_mut)]
 #![feature(extern_types, libc)]
+#![feature(ptr_wrapping_offset_from)]
+mod fileio;
+mod datagen;
+mod dibio;
+mod util;
+mod benchzstd;
+mod benchfn;
 extern crate libc;
+extern crate zstd;
 extern "C" {
     pub type FIO_prefs_s;
     #[no_mangle]
@@ -308,7 +316,7 @@ extern "C" {
     /*-*************************************
 *  Public functions
 ***************************************/
-/*! DiB_trainFromFiles() :
+/* DiB_trainFromFiles() :
     Train a dictionary from a set of files provided by `fileNamesTable`.
     Resulting dictionary is written into file `dictFileName`.
     `parameters` is optional and can be provided with values set to 0, meaning "default".

@@ -297,7 +297,7 @@ pub struct fileStats {
 /*-*************************************
 *  Public functions
 ***************************************/
-/*! DiB_trainFromFiles() :
+/* DiB_trainFromFiles() :
     Train a dictionary from a set of files provided by `fileNamesTable`.
     Resulting dictionary is written into file `dictFileName`.
     `parameters` is optional and can be provided with values set to 0, meaning "default".

@@ -42,7 +42,7 @@ extern "C" {
     /*-*****************************************
 *  FSE detailed API
 ******************************************/
-/*!
+/*
 FSE_compress() does the following:
 1. count symbol occurrence from source[] into table count[] (see hist.h)
 2. normalize counters so that sum(count[]) == Power_of_2 (2^tableLog)

@@ -6,6 +6,8 @@
          unused_mut)]
 #![feature(extern_types, libc, ptr_wrapping_offset_from)]
 extern crate libc;
+use ZSTD_cpuid;
+use ZSTD_cpuid_bmi2;
 extern "C" {
     pub type ZSTD_DDict_s;
     #[no_mangle]
@@ -792,9 +794,6 @@ unsafe extern "C" fn MEM_readLE64(mut memPtr: *const libc::c_void) -> U64 {
     if 0 != MEM_isLittleEndian() {
         return MEM_read64(memPtr)
     } else { return MEM_swap64(MEM_read64(memPtr)) };
-}
-unsafe extern "C" fn ZSTD_cpuid_bmi2(cpuid: ZSTD_cpuid_t) -> libc::c_int {
-    return (cpuid.f7b & 1u32 << 8i32 != 0i32 as libc::c_uint) as libc::c_int;
 }
 /*-****************************************
 *  Error codes handling
